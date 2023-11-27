@@ -317,3 +317,5 @@ LOGGING = {
         }
     }
 }
+
+AUTH_USER_MODEL = "export.User"

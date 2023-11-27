@@ -1,0 +1,17 @@
+---
+services:
+  db:
+    image: "postgres:12"
+    container_name: "exportgitlab_db"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=exportgitlab
+      - POSTGRES_PASSWORD=exportgitlab
+      - POSTGRES_DB=exportgitlab
+    ports:
+      - "5432:5432"
+    volumes:
+      - exportgitlab_db:/var/lib/postgresql/data
+volumes:
+  exportgitlab_db:
+    driver: local

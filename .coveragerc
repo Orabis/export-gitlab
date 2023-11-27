@@ -1,0 +1,4 @@
+[run]
+source = exportgitlab/
+omit = exportgitlab/settings/*
+       exportgitlab/wsgi.py

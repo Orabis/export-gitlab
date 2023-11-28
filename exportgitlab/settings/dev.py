@@ -84,3 +84,5 @@ MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
+
+CAS_SERVER_URL = 'https://cas-dev.unistra.fr/cas/'

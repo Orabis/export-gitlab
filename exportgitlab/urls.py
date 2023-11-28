@@ -12,6 +12,7 @@ urlpatterns = [
     # path('app/', include('apps.app.urls')),
 
     path('admin/', admin.site.urls),
+    path('cas/', include('django_cas.urls')),
 ]
 
 # debug toolbar for dev

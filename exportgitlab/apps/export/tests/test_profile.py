@@ -40,7 +40,7 @@ class TokenRegisterForm(TestCase):
     def test_user_creation(self):
         self.assertTrue(User.objects.exists())
 
-    def test_new_topic_invalid_post_data_to_much_character(self):
+    def test_new_token_invalid_post_data_to_much_character(self):
         url = reverse("tokenchangedpending")
         data = {
             "gitlab_token": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus auctor lorem, id dictum velit suscipit convallis. Curabitur eget augue eu leo ultrices blandit. Nunc consectetur semper feugiat. Vestibulum pharetra felis eget tellus consectetur gravida. Nullam a consectetur lectus. Vestibulum ante. "
@@ -48,3 +48,13 @@ class TokenRegisterForm(TestCase):
         response = self.client.post(url, data)
         self.assertEquals(response.status_code, 200)
         self.assertIsNone(self.user.gitlab_token)
+
+    def test_new_token_valid(self):
+        url = reverse("tokenchangedpending")
+        data = {
+            "gitlab_token": "glpat-8LDKS78XytBkBX3SjBUR"
+        }
+        response = self.client.post(url, data)
+        self.user.refresh_from_db()
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(data["gitlab_token"], self.user.gitlab_token)

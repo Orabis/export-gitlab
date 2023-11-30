@@ -20,8 +20,8 @@ DATABASES = {
         'NAME': environ.get('DEFAULT_DB_TEST_NAME', 'exportgitlab'),
         'USER': environ.get('DEFAULT_DB_TEST_USER', 'exportgitlab'),
         'PASSWORD': environ.get('DEFAULT_DB_TEST_PASSWORD', 'exportgitlab'),
-        'HOST': environ.get('DEFAULT_DB_TEST_HOST', 'postgres'),
-        'PORT': environ.get('DEFAULT_DB_TEST_PORT', ''),
+        'HOST': environ.get('DEFAULT_DB_TEST_HOST', 'localhost'),
+        'PORT': environ.get('DEFAULT_DB_TEST_PORT', '5432'),
     }
 }
 

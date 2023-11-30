@@ -5,5 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
+
 class User(AbstractUser):
-    gitlab_token = models.CharField(max_length=40, default='null', help_text=_('Gitlab personal token'))
+    gitlab_token = models.CharField(
+        max_length=40, blank=True, default=None, help_text=_("Gitlab personal token"), null=True
+    )

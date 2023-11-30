@@ -312,3 +312,4 @@ CAS_SERVER_URL = 'https://cas.unistra.fr/cas/'
 # CAS_LOGOUT_COMPLETELY = True
 CAS_USERNAME_FORMAT = username_format
 AUTHENTICATION_BACKENDS = ("django_cas.backends.CASBackend",)
+LOGIN_URL = '/cas/login'

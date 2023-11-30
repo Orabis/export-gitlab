@@ -1,0 +1,19 @@
+[tool.black]
+line-length = 119
+force-exclude = '''
+/(
+    \.git
+  | \.tox
+  | dist
+  | exportgitlab\/apps\/export\/migrations
+  | exportgitlab\/settings
+  | docs
+  | fabfile
+)/
+|manage.py
+|fabfile.py
+'''
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true

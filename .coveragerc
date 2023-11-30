@@ -2,3 +2,9 @@
 source = exportgitlab/
 omit = exportgitlab/settings/*
        exportgitlab/wsgi.py
+       exportgitlab/apps/export/migrations/*
+       exportgitlab/templatetags/*
+       setup.py
+       run_tests.py
+       manage.py
+       fabfile.py

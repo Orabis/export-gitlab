@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect, get_list_or_404
 from .forms import UserForm
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+
+from .models import *
 
 
 @login_required
@@ -27,7 +30,12 @@ def changetoken(request):
 
 
 def projects(request):
-    return render(request, "base.html")
+    all_projects = get_list_or_404(Project)
+    paginator = Paginator(all_projects, 10)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "export/projects_list.html", {"Project": all_projects, "page_obj": page_obj})
 
 
 def index(request):

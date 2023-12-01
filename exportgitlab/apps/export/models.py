@@ -12,8 +12,12 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["name"]
+
 
 class User(AbstractUser):
     gitlab_token = models.CharField(
-        max_length=40, blank=True, default=None, help_text=_("Gitlab personal token"), null=True)
+        max_length=40, blank=True, default=None, help_text=_("Gitlab personal token"), null=True
+    )
     projects = models.ManyToManyField(Project)

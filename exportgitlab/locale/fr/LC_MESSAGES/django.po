@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-01 11:02+0100\n"
+"POT-Creation-Date: 2023-12-01 16:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: exportgitlab/apps/export/models.py:11
+#: exportgitlab/apps/export/models.py:18
 msgid "Gitlab personal token"
 msgstr "Token personnel gitlab"
 
-#: exportgitlab/apps/export/models.py:17
-msgid "Gitlab project id"
-msgstr "id projet Gitlab"
-
-#: exportgitlab/apps/export/views.py:20
+#: exportgitlab/apps/export/views.py:24
 msgid "Gitlab token modified"
 msgstr "Token Gitlab modifié"
 
-#: exportgitlab/apps/export/views.py:23
+#: exportgitlab/apps/export/views.py:27
 #, fuzzy
 #| msgid "Gitlab personal token"
 msgid "Wrong Gitlab token"
@@ -44,7 +40,8 @@ msgstr "Page non trouvé"
 msgid "Error"
 msgstr "Erreur"
 
-#: exportgitlab/templates/base.html:36 exportgitlab/templates/profile.html:3
+#: exportgitlab/templates/base.html:36
+#: exportgitlab/templates/export/profile.html:3
 msgid "Profile"
 msgstr "Profil"
 
@@ -56,33 +53,65 @@ msgstr "Déconnexion"
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: exportgitlab/templates/change_token_pending.html:3
+#: exportgitlab/templates/export/change_token_pending.html:3
 msgid "Token Reset"
 msgstr "Reset Token"
 
-#: exportgitlab/templates/change_token_pending.html:20
-#: exportgitlab/templates/profile.html:21
+#: exportgitlab/templates/export/change_token_pending.html:20
+#: exportgitlab/templates/export/profile.html:21
 msgid "GitLab Token :"
 msgstr "Token GitLab :"
 
-#: exportgitlab/templates/change_token_pending.html:27
+#: exportgitlab/templates/export/change_token_pending.html:27
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: exportgitlab/templates/profile.html:5
+#: exportgitlab/templates/export/profile.html:5
 #, fuzzy
 #| msgid "No token defined "
 msgid "No token defined"
 msgstr "Aucun token défini"
 
-#: exportgitlab/templates/profile.html:17
+#: exportgitlab/templates/export/profile.html:17
 msgid "User Information"
 msgstr "Information Utilisateur"
 
-#: exportgitlab/templates/profile.html:19
+#: exportgitlab/templates/export/profile.html:19
 msgid "Username :"
 msgstr "Nom d'utilisateur :"
 
-#: exportgitlab/templates/profile.html:23
+#: exportgitlab/templates/export/profile.html:23
 msgid "Change the token "
 msgstr "Changer le token"
+
+#: exportgitlab/templates/export/projects_list.html:3
+#, fuzzy
+#| msgid "Gitlab project id"
+msgid "List of projects"
+msgstr "id projet Gitlab"
+
+#: exportgitlab/templates/export/projects_list.html:9
+#, fuzzy
+#| msgid "GitLab Token :"
+msgid "GitLab ID"
+msgstr "Token GitLab :"
+
+#: exportgitlab/templates/export/projects_list.html:10
+msgid "Name"
+msgstr "Nom"
+
+#: exportgitlab/templates/export/projects_list.html:33
+msgid "first"
+msgstr "premier"
+
+#: exportgitlab/templates/export/projects_list.html:34
+msgid "previous"
+msgstr "précédent"
+
+#: exportgitlab/templates/export/projects_list.html:42
+msgid "next"
+msgstr "suivant"
+
+#: exportgitlab/templates/export/projects_list.html:43
+msgid "last"
+msgstr "dernier"

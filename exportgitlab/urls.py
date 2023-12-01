@@ -8,11 +8,9 @@ admin.autodiscover()
 
 urlpatterns = [
     # Examples:
-    path("", home, name="home"),
-    # path('app/', include('apps.app.urls')),
+    path("", include("exportgitlab.apps.export.urls")),
     path("admin/", admin.site.urls),
     path("cas/", include("django_cas.urls")),
-    path("profile/", include("exportgitlab.apps.export.urls")),
 ]
 
 # debug toolbar for dev

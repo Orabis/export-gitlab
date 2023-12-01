@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 @login_required
 def profile(request):
-    return render(request, "profile.html", {"user": request.user})
+    return render(request, "export/profile.html", {"user": request.user})
 
 
 @login_required
@@ -23,4 +23,12 @@ def changetoken(request):
             messages.add_message(request, messages.ERROR, _("Wrong Gitlab token"))
     else:
         form = UserForm(instance=user)
-    return render(request, "change_token_pending.html", {"form": form})
+    return render(request, "export/change_token_pending.html", {"form": form})
+
+
+def projects(request):
+    return render(request, "base.html")
+
+
+def index(request):
+    return redirect("projects")

@@ -51,9 +51,7 @@ class TokenRegisterForm(TestCase):
 
     def test_new_token_valid(self):
         url = reverse("tokenchangedpending")
-        data = {
-            "gitlab_token": "glpat-8LDKS78XytBkBX3SjBUR"
-        }
+        data = {"gitlab_token": "glpat-8LDKS78XytBkBX3SjBUR"}
         response = self.client.post(url, data)
         self.user.refresh_from_db()
         self.assertEquals(response.status_code, 302)

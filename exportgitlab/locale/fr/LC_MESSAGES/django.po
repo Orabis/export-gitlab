@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 13:55+0100\n"
+"POT-Creation-Date: 2023-12-01 11:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-#: exportgitlab/apps/export/models.py:9
+
+#: exportgitlab/apps/export/models.py:11
 msgid "Gitlab personal token"
-msgstr "token personnel gitlab"
+msgstr "Token personnel gitlab"
+
+#: exportgitlab/apps/export/models.py:17
+msgid "Gitlab project id"
+msgstr "id projet Gitlab"
+
+#: exportgitlab/apps/export/views.py:20
+msgid "Gitlab token modified"
+msgstr "Token Gitlab modifié"
+
+#: exportgitlab/apps/export/views.py:23
+#, fuzzy
+#| msgid "Gitlab personal token"
+msgid "Wrong Gitlab token"
+msgstr "Mauvais token Gitlab"
 
 #: exportgitlab/templates/404.html:6
 msgid "Page not found"
@@ -28,3 +43,46 @@ msgstr "Page non trouvé"
 #: exportgitlab/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#: exportgitlab/templates/base.html:36 exportgitlab/templates/profile.html:3
+msgid "Profile"
+msgstr "Profil"
+
+#: exportgitlab/templates/base.html:37
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: exportgitlab/templates/base.html:44
+msgid "Homepage"
+msgstr "Page d'accueil"
+
+#: exportgitlab/templates/change_token_pending.html:3
+msgid "Token Reset"
+msgstr "Reset Token"
+
+#: exportgitlab/templates/change_token_pending.html:20
+#: exportgitlab/templates/profile.html:21
+msgid "GitLab Token :"
+msgstr "Token GitLab :"
+
+#: exportgitlab/templates/change_token_pending.html:27
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: exportgitlab/templates/profile.html:5
+#, fuzzy
+#| msgid "No token defined "
+msgid "No token defined"
+msgstr "Aucun token défini"
+
+#: exportgitlab/templates/profile.html:17
+msgid "User Information"
+msgstr "Information Utilisateur"
+
+#: exportgitlab/templates/profile.html:19
+msgid "Username :"
+msgstr "Nom d'utilisateur :"
+
+#: exportgitlab/templates/profile.html:23
+msgid "Change the token "
+msgstr "Changer le token"

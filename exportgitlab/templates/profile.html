@@ -1,7 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Profile{% endblock title %}
+{% load i18n %}
+{% block title %}{% trans "Profile"%}{% endblock title %}
 
-{% block content %}
+{% block content %}{% translate "No token defined" as no_token_defined %}
+
 <div class="container">
     {% if messages %}
     <div class="alert alert-success" role="alert">
@@ -12,13 +14,13 @@
     {% endif %}
 
     <div class="well">
-    <h3>User Information</h3>
+    <h3>{% trans "User Information" %}</h3>
     <dl class="dl-horizontal">
-        <dt>Username:</dt>
+        <dt>{% trans "Username :"%}</dt>
         <dd>{{ user.username }}</dd>
-        <dt>GitLab Token:</dt>
-        <dd>{{ user.gitlab_token|default:"Token non défini" }}</dd>
-        <dd><a href="{% url "tokenchangedpending" %}">Changer de token</a></dd>
+        <dt>{% trans "GitLab Token :"%}</dt>
+        <dd>{{ user.gitlab_token|default:no_token_defined }}</dd>
+        <dd><a href="{% url "tokenchangedpending" %}">{% trans "Change the token "%}</a></dd>
     </dl>
 
     </div>

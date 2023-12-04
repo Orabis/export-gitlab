@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% dipstrap 'css/bootstrap-theme-unistra.min.css' %}">
     <link rel="stylesheet" href="{% dipstrap 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/exportgitlab.css' %}" type="text/css" title="no title" charset="utf-8" />
-
+    <link rel="icon" type="image/png" href="{% static 'img/favicon-32x32.png' %}"/>
     <script src="{% dipstrap 'js/vendor/modernizr-2.6.2-respond-1.1.0.min.js' %}"></script>
     {% block head-javascript %}{% endblock %}
 </head>
@@ -39,7 +39,16 @@
             </div>
         </div>
     </div>
+
     <div class="container">
+
+        {% if messages %}
+            <div class="container">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        </div>
     {% block content %}
     {% translate "Homepage" %}
     {% endblock %}

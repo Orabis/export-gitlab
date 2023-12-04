@@ -5,14 +5,6 @@
 {% block content %}{% translate "No token defined" as no_token_defined %}
 
 <div class="container">
-    {% if messages %}
-    <div class="alert alert-success" role="alert">
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-    </div>
-    {% endif %}
-
     <div class="well">
     <h3>{% trans "User Information" %}</h3>
     <dl class="dl-horizontal">

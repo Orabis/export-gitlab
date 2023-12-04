@@ -29,9 +29,13 @@ def changetoken(request):
     return render(request, "export/change_token_pending.html", {"form": form})
 
 
+@login_required
 def projects(request):
     all_projects = get_list_or_404(Project)
     paginator = Paginator(all_projects, 10)
+    if not request.user.gitlab_token:
+        messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
+        return redirect("profile")
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)

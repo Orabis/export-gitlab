@@ -96,5 +96,9 @@ def refresh(request, id_pj):
     return redirect("projects")
 
 
+def issues(request, id_pj):
+    return render(request, "export/issues_list.html")
+
+
 def index(request):
     return redirect("projects")

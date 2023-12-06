@@ -1,6 +1,5 @@
  .custom-div {
-      margin-top: 50px;}
-
+      margin-top: 50px;display:flex;}
 
 .success {
   background-color: #d4edda;
@@ -36,7 +35,25 @@
   padding: 10px;
 }
 
-.table{
-  margin-top: 10px;
-  display: table-row;
+.table {
+  margin-top:10px;
+}
+
+.table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f2f2f2;
+
+}
+
+.table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
 }

@@ -4,33 +4,26 @@
 {% block content %}{% translate "No description" as no_description_provided %}
 
 <div class="container">
-    <form action="{% url 'projects' %}" method="post" class="form-horizontal">
+    <form action="{% url 'projects' %}" method="post" class="my-4 form-inline">
         {% csrf_token %}
-                {{ form.gitlab_id }}
-                <button type="submit" class="btn btn-primary" name="retrieveproject" value="retrieveproject">
-                    {% translate "Confirm" %}
-                </button>
+        <div class="form-group">
+            {{ form.gitlab_id }}
+        </div>
+        <button type="submit" class="btn" name="retrieveproject" value="retrieveproject">
+            {% translate "Confirm" %}
+        </button>
     </form>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>{% trans "GitLab ID" %}</th>
-                <th>{% trans "Name" %}</th>
-                <th>URL</th>
-                <th></th>
-            </tr>
-        </thead>
+    <table class="table">
         <tbody>
             {% for project in page_obj %}
                 <tr>
-                    <td><p class="text-center ">{{ project.gitlab_id }}</p></td>
+                    <td><p class="text-center vertical-center">{{ project.gitlab_id }}</p></td>
                     <td>
                         <a class="" href="{% url "issue_list" id_pj=project.id %}">
                             {{ project.name }}
                         </a>
                         <br>
-                        <p class ="text-muted">{{ project.description|default:no_description_provided}}</p>
+                        <p class ="text-muted vertical-center">{{ project.description|default:no_description_provided}}</p>
                     </td>
                     <td><a href="{{ project.url }}" target="_blank">{{ project.url }}</a></td>
                     <td>

@@ -1,3 +1,52 @@
 {% extends "base.html" %}
 {% load i18n %}
+
 {% block title %}{% trans "issues"%}{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h4 class="">Project ID: {{ the_project.gitlab_id }} - {{ the_project.name }} - Issues</h4>
+    <br>
+    <table class="table">
+    <tbody>
+        {% for issue in page_obj %}
+            <tr>
+                <td><p>{{ issue.iid }} - {{ issue.title }}</p>
+                <p class="text-muted vertical-center">{{ issue.author.name }}</p></td>
+                <td>{% for tag in issue.labels %}
+                    <span style="background-color:#000000" class="label label-default">{{ tag }}</span>
+                {% endfor %}</td>
+
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% if page_obj.next_page_number > 1 or page_obj.has_previous %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
+                {% endif %}
+
+                <li class="disabled">
+                    <span>
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

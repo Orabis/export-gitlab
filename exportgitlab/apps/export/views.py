@@ -27,6 +27,7 @@ def get_token_or_redirect(request):
     if not useractualtoken:
         messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
         raise NoTokenError(f"user {request.user.username} has no gitlabtoken")
+    return useractualtoken
 
 
 @login_required
@@ -63,7 +64,6 @@ def projects(request):
     if request.method == "POST":
         form = GitlabIDForm(request.POST)
         if form.is_valid():
-            gl = gl_connection(useractualtoken)
             project_id = form.cleaned_data["gitlab_id"]
             try:
                 project: GLProject = gl.projects.get(project_id)
@@ -92,7 +92,7 @@ def projects(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "export/projects_list.html", {"Project": all_projects, "page_obj": page_obj, "form": form})
+    return render(request, "export/projects_list.html", {"page_obj": page_obj, "form": form})
 
 
 def refresh(request, id_pj):
@@ -119,15 +119,28 @@ def refresh(request, id_pj):
 
 
 def issues(request, id_pj):
-    the_project = get_object_or_404(Project, id=id_pj)
+    the_project: Project = get_object_or_404(Project, id=id_pj)
+
     try:
         useractualtoken = get_token_or_redirect(request)
         gl = gl_connection(useractualtoken)
     except NoTokenError:
         return redirect("profile")
+    gitlab_project: GLProject = gl.projects.get(the_project.gitlab_id)
+    list_issues = gitlab_project.issues.list(get_all=True, state="opened")
+    gitlab_labels = gitlab_project.labels.list()
+    gitlab_labels_dict = {}
+    for label in gitlab_labels:
+        gitlab_labels_dict[label.name] = label.color
 
-    issues_info = gl.issues.get(the_project.gitlab_id)
-    return render(request, "export/issues_list.html")
+    paginator = Paginator(list_issues, 100)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        "export/issues_list.html",
+        {"the_project": the_project, "page_obj": page_obj, "gitlab_labels": gitlab_labels_dict},
+    )
 
 
 def index(request):

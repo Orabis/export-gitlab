@@ -17,9 +17,8 @@
         <tbody>
             {% for project in page_obj %}
                 <tr>
-                    <td><p class="text-center vertical-center">{{ project.gitlab_id }}</p></td>
                     <td>
-                        <a class="" href="{% url "issue_list" id_pj=project.id %}">
+                        {{ project.gitlab_id }} - <a class="" href="{% url "issue_list" id_pj=project.id %}">
                             {{ project.name }}
                         </a>
                         <br>

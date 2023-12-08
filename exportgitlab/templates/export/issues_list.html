@@ -9,6 +9,9 @@
     <h4 class="">Project ID: {{ the_project.gitlab_id }} - {{ the_project.name }} - Issues</h4>
     <br>
     <table class="table">
+    <form method='POST' action="{% url "download_issues" id_pj=the_project.id%}">
+    {% csrf_token %}
+    <button type="submit">Subscribe</button>
     <tbody>
         {% for issue in page_obj %}
             <tr>
@@ -17,10 +20,11 @@
                 <td>{% for tag in issue.labels %}
                             <p style="background-color:{{ gitlab_labels|get_value:tag }}" class="label label-default">{{ tag }}</p><br>{% endfor %}</td>
 
-
+                <td><input type="checkbox" name="checkbox_issues" id="checkbox_issues" value="{{ issue.iid }}"></td>
             </tr>
         {% endfor %}
     </tbody>
+    </form>
 </table>
 </div>
 

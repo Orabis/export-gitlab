@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import Http404
 from django.shortcuts import (
     get_list_or_404,
     get_object_or_404,
@@ -118,6 +117,7 @@ def refresh(request, id_pj):
     return redirect("projects")
 
 
+@login_required
 def issues(request, id_pj):
     the_project: Project = get_object_or_404(Project, id=id_pj)
 
@@ -141,6 +141,33 @@ def issues(request, id_pj):
         "export/issues_list.html",
         {"the_project": the_project, "page_obj": page_obj, "gitlab_labels": gitlab_labels_dict},
     )
+
+
+@login_required
+def download(request, id_pj):
+    the_project: Project = get_object_or_404(Project, id=id_pj)
+    try:
+        useractualtoken = get_token_or_redirect(request)
+        gl = gl_connection(useractualtoken)
+    except NoTokenError:
+        return redirect("profile")
+    gitlab_project: GLProject = gl.projects.get(the_project.gitlab_id)
+
+    if request.method == "POST":
+        issue_nbr = 0
+        issues_list = request.POST.getlist("checkbox_issues")
+        print(issues_list)
+        for issue in issues_list:
+            if issue_nbr == 0:
+                messages.add_message(request, messages.SUCCESS, _("Message successfully downloaded"))
+            list_issues = gitlab_project.issues.get(issues_list[issue_nbr])
+            issue_nbr += 1
+            issue_id = list_issues.iid
+            issue_title = list_issues.title
+            issue_description = list_issues.description
+            print(f"issue {issue_id}:{issue_title},description {issue_description}")
+
+    return redirect("projects")
 
 
 def index(request):

@@ -1,13 +1,21 @@
+import base64
+import datetime
+import json
+
 import markdown2
+import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 from django.shortcuts import (
     get_list_or_404,
     get_object_or_404,
     redirect,
     render,
 )
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
@@ -22,12 +30,37 @@ class NoTokenError(Exception):
     pass
 
 
+class PDFGenerationError(Exception):
+    pass
+
+
 def get_token_or_redirect(request):
     useractualtoken = request.user.gitlab_token
     if not useractualtoken:
         messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
         raise NoTokenError(f"user {request.user.username} has no gitlabtoken")
     return useractualtoken
+
+
+def html_to_pdf(html: str) -> bytes:
+    url: str = settings.WKHTML_TO_PDF_URL
+    content: dict[str, str] = {
+        "contents": base64.b64encode(html.encode("utf-8")).decode("utf-8"),
+        "options": {
+            "footer-font-size": "4",
+            "footer-right": "[page] / [topage]",
+            "footer-left": datetime.date.today().strftime("%d %m %Y"),
+        },
+    }
+    headers: dict[str, str] = {
+        "Content-Type": "application/json",
+    }
+    response: requests.Response = requests.post(url, data=json.dumps(content), headers=headers)
+
+    if not response.ok:
+        raise PDFGenerationError(response.content)
+
+    return response.content
 
 
 @login_required
@@ -168,8 +201,15 @@ def download(request, id_pj):
                     "description": html_description,
                 }
             )
-        return render(request, "export/output.html", {"issues_data": issues_data})
-
+        html = render_to_string("export/output.html", {"issues_data": issues_data}, request)
+        try:
+            data = html_to_pdf(html)
+        except PDFGenerationError as e:
+            messages.add_message(request, messages.ERROR, _("ErrorPDF"))
+            raise PDFGenerationError("PDF generation error")
+        response = HttpResponse(data, content_type="application/pdf")
+        response["Content-Disposition"] = f'attachement; filename="issue {issues_list}.pdf"'
+        return response
     return redirect("projects")
 
 

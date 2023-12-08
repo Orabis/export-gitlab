@@ -3,7 +3,6 @@ from pathlib import Path
 
 from .base import *
 
-
 #######################
 # Debug configuration #
 #######################
@@ -86,3 +85,5 @@ MIDDLEWARE += [
 INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
 
 CAS_SERVER_URL = 'https://cas-dev.unistra.fr/cas/'
+
+WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'

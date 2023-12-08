@@ -16,10 +16,11 @@
         {% for issue in page_obj %}
             <tr>
                 <td><p>{{ issue.iid }} - {{ issue.title }}</p>
-                <p class="text-muted vertical-center">{{ issue.author.name }}</p></td>
-                <td>{% for tag in issue.labels %}
-                            <p style="background-color:{{ gitlab_labels|get_value:tag }}" class="label label-default">{{ tag }}</p><br>{% endfor %}</td>
-
+                <p class="text-muted vertical-center">{{ issue.author.name }}</p>
+                {% for tag in issue.labels %}
+                            <span style="background-color:{{ gitlab_labels|get_value:tag }}" class="label label-default">{{ tag }}</span>
+                {% endfor %}
+                </td>
                 <td><input type="checkbox" name="checkbox_issues" id="checkbox_issues" value="{{ issue.iid }}"></td>
             </tr>
         {% endfor %}

@@ -1,3 +1,4 @@
+import markdown2
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -154,18 +155,20 @@ def download(request, id_pj):
     gitlab_project: GLProject = gl.projects.get(the_project.gitlab_id)
 
     if request.method == "POST":
-        issue_nbr = 0
         issues_list = request.POST.getlist("checkbox_issues")
-        print(issues_list)
-        for issue in issues_list:
-            if issue_nbr == 0:
-                messages.add_message(request, messages.SUCCESS, _("Message successfully downloaded"))
-            list_issues = gitlab_project.issues.get(issues_list[issue_nbr])
-            issue_nbr += 1
-            issue_id = list_issues.iid
-            issue_title = list_issues.title
-            issue_description = list_issues.description
-            print(f"issue {issue_id}:{issue_title},description {issue_description}")
+        issues_data = []
+        for issue_id in issues_list:
+            list_issues = gitlab_project.issues.get(issue_id)
+            html_title = markdown2.markdown(list_issues.title)
+            html_description = markdown2.markdown(list_issues.description)
+            issues_data.append(
+                {
+                    "id": issue_id,
+                    "title": html_title,
+                    "description": html_description,
+                }
+            )
+        return render(request, "export/output.html", {"issues_data": issues_data})
 
     return redirect("projects")
 

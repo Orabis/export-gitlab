@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Issues</title>
+</head>
+<body>
+{% for issue in issues_data %}
+    <div class="issue-container">
+        <h1>Issue ID: {{ issue.id }}</h1>
+        <div class="issue-title">
+            {{ issue.title|safe }}
+        </div>
+        <div class="issue-description">
+            {{ issue.description|safe }}
+        </div>
+    <br>
+    </div>
+{% endfor %}
+</body>
+</html>

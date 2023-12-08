@@ -1,7 +1,21 @@
+import base64
+import datetime
+import json
+
+import markdown2
+import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import get_list_or_404, redirect, render
+from django.http import HttpResponse
+from django.shortcuts import (
+    get_list_or_404,
+    get_object_or_404,
+    redirect,
+    render,
+)
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
@@ -10,6 +24,43 @@ from exportgitlab.libs.connect import gl_connection
 
 from .forms import *
 from .models import *
+
+
+class NoTokenError(Exception):
+    pass
+
+
+class PDFGenerationError(Exception):
+    pass
+
+
+def get_token_or_redirect(request):
+    useractualtoken = request.user.gitlab_token
+    if not useractualtoken:
+        messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
+        raise NoTokenError(f"user {request.user.username} has no gitlabtoken")
+    return useractualtoken
+
+
+def html_to_pdf(html: str) -> bytes:
+    url: str = settings.WKHTML_TO_PDF_URL
+    content: dict[str, str] = {
+        "contents": base64.b64encode(html.encode("utf-8")).decode("utf-8"),
+        "options": {
+            "footer-font-size": "4",
+            "footer-right": "[page] / [topage]",
+            "footer-left": datetime.date.today().strftime("%d %m %Y"),
+        },
+    }
+    headers: dict[str, str] = {
+        "Content-Type": "application/json",
+    }
+    response: requests.Response = requests.post(url, data=json.dumps(content), headers=headers)
+
+    if not response.ok:
+        raise PDFGenerationError(response.content)
+
+    return response.content
 
 
 @login_required
@@ -37,11 +88,15 @@ def changetoken(request):
 def projects(request):
     all_projects = get_list_or_404(Project)
     paginator = Paginator(all_projects, 10)
-    useractualtoken = request.user.gitlab_token
+    try:
+        useractualtoken = get_token_or_redirect(request)
+        gl = gl_connection(useractualtoken)
+    except NoTokenError:
+        return redirect("profile")
+
     if request.method == "POST":
         form = GitlabIDForm(request.POST)
         if form.is_valid():
-            gl = gl_connection(useractualtoken)
             project_id = form.cleaned_data["gitlab_id"]
             try:
                 project: GLProject = gl.projects.get(project_id)
@@ -68,19 +123,19 @@ def projects(request):
     else:
         form = GitlabIDForm()
 
-    if not useractualtoken:
-        messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
-        return redirect("profile")
-
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "export/projects_list.html", {"Project": all_projects, "page_obj": page_obj, "form": form})
+    return render(request, "export/projects_list.html", {"page_obj": page_obj, "form": form})
 
 
 def refresh(request, id_pj):
-    useractualtoken = request.user.gitlab_token
+    try:
+        useractualtoken = get_token_or_redirect(request)
+        gl = gl_connection(useractualtoken)
+    except NoTokenError:
+        return redirect("profile")
+
     the_project = Project.objects.get(id=id_pj)
-    gl = gl_connection(useractualtoken)
     project_info = gl.projects.get(the_project.gitlab_id)
     Project.name = project_info.name_with_namespace
     Project.description = project_info.description
@@ -96,8 +151,66 @@ def refresh(request, id_pj):
     return redirect("projects")
 
 
+@login_required
 def issues(request, id_pj):
-    return render(request, "export/issues_list.html")
+    the_project: Project = get_object_or_404(Project, id=id_pj)
+
+    try:
+        useractualtoken = get_token_or_redirect(request)
+        gl = gl_connection(useractualtoken)
+    except NoTokenError:
+        return redirect("profile")
+    gitlab_project: GLProject = gl.projects.get(the_project.gitlab_id)
+    list_issues = gitlab_project.issues.list(get_all=True, state="opened")
+    gitlab_labels = gitlab_project.labels.list()
+    gitlab_labels_dict = {}
+    for label in gitlab_labels:
+        gitlab_labels_dict[label.name] = label.color
+
+    paginator = Paginator(list_issues, 100)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        "export/issues_list.html",
+        {"the_project": the_project, "page_obj": page_obj, "gitlab_labels": gitlab_labels_dict},
+    )
+
+
+@login_required
+def download(request, id_pj):
+    the_project: Project = get_object_or_404(Project, id=id_pj)
+    try:
+        useractualtoken = get_token_or_redirect(request)
+        gl = gl_connection(useractualtoken)
+    except NoTokenError:
+        return redirect("profile")
+    gitlab_project: GLProject = gl.projects.get(the_project.gitlab_id)
+
+    if request.method == "POST":
+        issues_list = request.POST.getlist("checkbox_issues")
+        issues_data = []
+        for issue_id in issues_list:
+            list_issues = gitlab_project.issues.get(issue_id)
+            html_title = markdown2.markdown(list_issues.title)
+            html_description = markdown2.markdown(list_issues.description)
+            issues_data.append(
+                {
+                    "id": issue_id,
+                    "title": html_title,
+                    "description": html_description,
+                }
+            )
+        html = render_to_string("export/output.html", {"issues_data": issues_data}, request)
+        try:
+            data = html_to_pdf(html)
+        except PDFGenerationError as e:
+            messages.add_message(request, messages.ERROR, _("ErrorPDF"))
+            raise PDFGenerationError("PDF generation error")
+        response = HttpResponse(data, content_type="application/pdf")
+        response["Content-Disposition"] = f'attachement; filename="issue {issues_list}.pdf"'
+        return response
+    return redirect("projects")
 
 
 def index(request):

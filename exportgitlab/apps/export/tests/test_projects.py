@@ -25,3 +25,11 @@ class ProjectsTest(TestCase):
         self.project.refresh_from_db()
         response = self.client.get(reverse("projects"))
         self.assertEqual(response.status_code, 200)
+
+    def test_successful_redirect_to_projects(self):
+        response = self.client.get(reverse("projects"))
+        self.assertEqual(response.status_code, 302)
+
+
+class ProjectRegisterForm(TestCase):
+    ...

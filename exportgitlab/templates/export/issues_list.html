@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load export_extras %}
 
 {% block title %}{% trans "issues"%}{% endblock title %}
 
@@ -14,8 +15,7 @@
                 <td><p>{{ issue.iid }} - {{ issue.title }}</p>
                 <p class="text-muted vertical-center">{{ issue.author.name }}</p></td>
                 <td>{% for tag in issue.labels %}
-                    <span style="background-color:#000000" class="label label-default">{{ tag }}</span>
-                {% endfor %}</td>
+                            <p style="background-color:{{ gitlab_labels|get_value:tag }}" class="label label-default">{{ tag }}</p><br>{% endfor %}</td>
 
 
             </tr>

@@ -19,7 +19,6 @@ class ProjectsTest(TestCase):
         response = self.client.get(reverse("projects"))
         self.assertEqual(response.status_code, 302)
 
-
     def test_projects_view_authenticated_and_gitlab_token_registered(self):
         user = User.objects.create_user(username="JohnPork", gitlab_token="gyyat1234")
         self.client.force_login(user)
@@ -41,4 +40,3 @@ class ProjectRegisterForm(TestCase):
     #   self.project.refresh_from_db()
     #   response = self.client.get(reverse("projects"))
     #   self.assertEqual(response.status_code, 200)
-

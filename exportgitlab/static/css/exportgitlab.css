@@ -1,6 +1,9 @@
  .custom-div {
       margin-top: 50px;display:flex;}
 
+.nav-link{
+  color: #ffffff;
+}
 .success {
   background-color: #d4edda;
   color: #155724;

@@ -3,19 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Issues</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .issue-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .issue-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .issue-description {
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-{% for issue in issues_data %}
-    <div class="issue-container">
-        <h1>Issue ID: {{ issue.id }}</h1>
-        <div class="issue-title">
-            {{ issue.title|safe }}
+    {% for issue in issues_data %}
+        <div class="issue-container">
+            <h1>Issue ID: {{ issue.id }}</h1>
+            <div class="issue-title">
+                {{ issue.title|safe }}
+            </div>
+            <div class="issue-description">
+                {{ issue.description|safe }}
+            </div>
+            <br>
         </div>
-        <div class="issue-description">
-            {{ issue.description|safe }}
-        </div>
-    <br>
-    </div>
-{% endfor %}
+    {% endfor %}
 </body>
 </html>

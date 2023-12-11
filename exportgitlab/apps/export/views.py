@@ -210,6 +210,7 @@ def download(request, id_pj):
         response = HttpResponse(data, content_type="application/pdf")
         response["Content-Disposition"] = f'attachement; filename="issue {issues_list}.pdf"'
         return response
+    messages.add_message(request, messages.ERROR, _("Error downloading issues"))
     return redirect("projects")
 
 

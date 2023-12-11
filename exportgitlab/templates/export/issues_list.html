@@ -11,7 +11,7 @@
     <table class="table">
     <form method='POST' action="{% url "download_issues" id_pj=the_project.id%}">
     {% csrf_token %}
-    <button type="submit">Subscribe</button>
+    <button class="btn" type="submit">{% trans "Download" %}</button>
     <tbody>
         {% for issue in page_obj %}
             <tr>

@@ -86,7 +86,7 @@ def changetoken(request):
 
 @login_required
 def projects(request):
-    all_projects = get_list_or_404(Project)
+    all_projects = Project.objects.all()
     paginator = Paginator(all_projects, 10)
     try:
         useractualtoken = get_token_or_redirect(request)

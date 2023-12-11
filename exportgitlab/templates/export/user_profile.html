@@ -12,7 +12,7 @@
         <dd>{{ user.username }}</dd>
         <dt>{% trans "GitLab Token :"%}</dt>
         <dd>{{ user.gitlab_token|default:no_token_defined }}</dd>
-        <dd><a href="{% url "tokenchangedpending" %}">{% trans "Change the token "%}</a></dd>
+        <dd><a href="{% url "user_change_token" %}">{% trans "Change the token "%}</a></dd>
     </dl>
 
     </div>

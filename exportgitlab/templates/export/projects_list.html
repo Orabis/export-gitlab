@@ -13,27 +13,22 @@
             {% translate "Confirm" %}
         </button>
     </form>
-    <table class="table">
-        <tbody>
-            {% for project in page_obj %}
-                <tr>
-                    <td>
-                        {{ project.gitlab_id }} - <a class="" href="{% url "issue_list" id_pj=project.id %}">
-                            {{ project.name }}
-                        </a>
-                        <br>
-                        <p class ="text-muted vertical-center">{{ project.description|default:no_description_provided}}</p>
-                    </td>
-                    <td><a href="{{ project.url }}" target="_blank">{{ project.url }}</a></td>
-                    <td>
-                        <a class="btn btn-primary" href="{% url "refreshproject" id_pj=project.id %}">
-                            {% trans "Refresh" %}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table class="table table-bordered">
+    <tbody>
+        {% for project in page_obj %}
+            <tr>
+                <td>
+                    <a class="glyphicon glyphicon-refresh" href="{% url "refreshproject" id_pj=project.id %}"></a>
+                    {{ project.gitlab_id }} - <a class="" href="{% url "issue_list" id_pj=project.id %}">{{ project.name }}</a>
+                    <br>
+                    <span class="text-muted vertical-center">{{ project.description|default:no_description_provided }}</span>
+                    <a href="{{ project.url }}" target="_blank">{{ project.url }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 </div>
 
 {% if page_obj.next_page_number > 1 or page_obj.has_previous %}

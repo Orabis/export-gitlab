@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
@@ -155,12 +155,23 @@ def list_all_issues(request, id_pj):
         gl = gl_connection(user_token)
     except NoTokenError:
         return redirect("user_profile")
+
     project_model: GLProject = gl.projects.get(project.gitlab_id)
-    list_issues = project_model.issues.list(get_all=True, state="opened")
     gitlab_labels = project_model.labels.list()
-    gitlab_labels_dict = {}
-    for label in gitlab_labels:
-        gitlab_labels_dict[label.name] = label.color
+    gitlab_labels_dict = {label.name: label.color for label in gitlab_labels}
+
+    if QueryDict(request.GET.urlencode()):
+        iid_filter = [request.GET.get("iid")]
+        labels_filter = [request.GET.get("lab")]
+        opened_closed_filter = request.GET.get("oc")
+        if iid_filter[0] == "":
+            iid_filter = None
+        if labels_filter == [None]:
+            list_issues = project_model.issues.list(state=opened_closed_filter, iids=iid_filter)
+        else:
+            list_issues = project_model.issues.list(state=opened_closed_filter, iids=iid_filter, labels=labels_filter)
+    else:
+        list_issues = project_model.issues.list(get_all=True, state="opened")
 
     paginator = Paginator(list_issues, 100)
     page_number = request.GET.get("page")

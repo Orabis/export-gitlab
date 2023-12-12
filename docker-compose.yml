@@ -1,5 +1,11 @@
 ---
 services:
+  wkhtmltopdf:
+    image: "unistra/wkhtmltopdf:latest"
+    container_name: "exportgitlab_wkhtmltopdf"
+    restart: unless-stopped
+    ports:
+      - "8001:80"
   db:
     image: "postgres:12"
     container_name: "exportgitlab_db"

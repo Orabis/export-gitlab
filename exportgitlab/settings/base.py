@@ -79,7 +79,6 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -314,3 +313,4 @@ CAS_SERVER_URL = 'https://cas.unistra.fr/cas/'
 CAS_USERNAME_FORMAT = username_format
 AUTHENTICATION_BACKENDS = ("django_cas.backends.CASBackend",)
 LOGIN_URL = '/cas/login'
+WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'

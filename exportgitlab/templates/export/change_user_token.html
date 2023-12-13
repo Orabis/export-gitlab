@@ -5,28 +5,28 @@
 {% block content %}
 <div class="container">
     <div class="well">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <form action="{% url 'user_change_token' %}" method="post" class="form-horizontal">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="{{ form.gitlab_token.id_for_label }}" class="col-sm-3 control-label">{% trans "GitLab Token :"%}</label>
-                    <div class="col-sm-9">
-                        {{ form.gitlab_token }}
+        <div class="row">
+            <div class="col-md-6">
+                <form action="{% url 'user_change_token' %}" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="{{ form.gitlab_token.id_for_label }}" class="col-sm-3">
+                            {% trans "GitLab Token :"%}
+                            <p class="form-gitlab-token">{{ form.gitlab_token }}</p>
+                        </label>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button type="submit" class="btn btn-primary">{% translate "Confirm"%}</button>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <button type="submit" class="btn btn-primary">{% translate "Confirm"%}</button>
+                        </div>
+                        <div class="custom-div">
+                            {{ form.gitlab_token.errors }}
+                        </div>
                     </div>
-                    <div class="custom-div">
-                        {{ form.gitlab_token.errors }}
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 

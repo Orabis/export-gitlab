@@ -4,7 +4,7 @@
 {% block content %}{% translate "No description" as no_description_provided %}
 
 <div class="container">
-    <form action="{% url 'list_all_projects_homepage' %}" method="post" class="my-4 form-inline">
+    <form action="{% url 'list_all_projects_homepage' %}" method="post" class="form-inline">
         {% csrf_token %}
         <div class="form-group">
             {{ form.gitlab_id }}
@@ -13,22 +13,24 @@
             {% translate "Confirm" %}
         </button>
     </form>
-<table class="table table-bordered">
-    <tbody>
-        {% for project in page_obj %}
-            <tr>
-                <td>
-                    <a class="glyphicon glyphicon-refresh" href="{% url "refresh_project" id_pj=project.id %}"></a>
-                    {{ project.gitlab_id }} - <a class="" href="{% url "list_all_issues" id_pj=project.id %}">{{ project.name }}</a>
-                    <br>
-                    <span class="text-muted vertical-center">{{ project.description|default:no_description_provided }}</span>
-                    <a href="{{ project.url }}" target="_blank">{{ project.url }}</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+    <table class="table table-bordered">
+        <tbody>
+            {% for project in page_obj %}
+                <tr>
+                    <td>
+                        <div class="project-id-name-refresh">
+                            <a class="glyphicon glyphicon-refresh" href="{% url "refresh_project" id_pj=project.id %}"></a>{{ project.gitlab_id }} - 
+                            <a class="" href="{% url "list_all_issues" id_pj=project.id %}">{{ project.name }}</a>
+                        </div>
+                        <div class="project-desc-url">
+                            <span class="text-muted vertical-center">{{ project.description|default:no_description_provided }}</span>
+                            <a href="{{ project.url }}" target="_blank">{{ project.url }}</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 {% if page_obj.next_page_number > 1 or page_obj.has_previous %}
@@ -56,5 +58,4 @@
     </div>
 </div>
 {% endif %}
-
 {% endblock %}

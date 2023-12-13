@@ -6,15 +6,16 @@
 
 <div class="container">
     <div class="well">
-    <h3>{% trans "User Information" %}</h3>
-    <dl class="dl-horizontal">
-        <dt>{% trans "Username :"%}</dt>
-        <dd>{{ user.username }}</dd>
-        <dt>{% trans "GitLab Token :"%}</dt>
-        <dd>{{ user.gitlab_token|default:no_token_defined }}</dd>
-        <dd><a href="{% url "user_change_token" %}">{% trans "Change the token "%}</a></dd>
-    </dl>
-
+        <h3>{% trans "User Information" %}</h3>
+        <dl class="dl-horizontal">
+            <dt>{% trans "Username :"%}</dt>
+            <dd>{{ user.username }}</dd>
+            
+            <dt>{% trans "GitLab Token :"%}</dt>
+            <dd>{{ user.gitlab_token|default:no_token_defined }}</dd>
+            <dd><a href="{% url "user_change_token" %}">{% trans "Change the token "%}</a></dd>
+        </dl>
     </div>
 </div>
+    
 {% endblock %}

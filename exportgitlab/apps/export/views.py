@@ -230,7 +230,12 @@ def download_report_issues(request, id_pj):
             messages.add_message(request, messages.ERROR, _("ErrorPDF"))
             raise PDFGenerationError("PDF generation error")
         response = HttpResponse(data, content_type="application/pdf")
-        response["Content-Disposition"] = f'attachement; filename="issue {issues_list}.pdf"'
+        if len(issues_list) >= 2:
+            response[
+                "Content-Disposition"
+            ] = f'attachement; filename="issues {issues_list[0]} - {issues_list[-1]}.pdf"'
+        else:
+            response["Content-Disposition"] = f'attachement; filename="issue {issues_list[0]}.pdf"'
         return response
     messages.add_message(request, messages.ERROR, _("Error downloading issues"))
     return redirect("list_all_projects_homepage")

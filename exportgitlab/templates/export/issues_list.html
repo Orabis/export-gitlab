@@ -15,7 +15,7 @@
     <aside class="well">
         <form method="GET" action="{% url "list_all_issues" id_pj=project.id%}">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="ids_form">
                         <label for="iids">ID:</label>
                         <input class="form-control" name="iid" id="iids" value="" placeholder="1,2,3,4">
@@ -34,12 +34,12 @@
                         </div>
                     </div>
                     <div class="button_form">
-                        <button class="btn btn" type="submit">{% trans "Filter"%}</button>
-                        <input class="btn btn" type="reset" value="{% trans "Reset" %}">
+                        <button class="btn btn-default" type="submit">{% trans "Filter"%}</button>
+                        <input class="btn btn-default" type="reset" value="{% trans "Reset" %}">
                     </div>
                 </div>
             
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="labels_filter">
                         {% for label in gitlab_labels %}
                             <div class="form-check form-check-inline">

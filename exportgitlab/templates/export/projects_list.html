@@ -2,17 +2,29 @@
 {% load i18n %}
 {% block title %}{% trans "List of projects"%}{% endblock title %}
 {% block content %}{% translate "No description" as no_description_provided %}
-
 <div class="container">
-    <form action="{% url 'list_all_projects_homepage' %}" method="post" class="form-inline">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.gitlab_id }}
-        </div>
-        <button type="submit" class="btn" name="retrieve_project" value="retrieve_project">
-            {% translate "Confirm" %}
-        </button>
-    </form>
+    <div class="project-forms">
+            <form action="{% url 'list_all_projects_homepage' %}" method="post" style="margin-bottom: 10px" class="form-inline">
+                <label>
+                    {% trans "Retrieve project :"%}
+                    {% csrf_token %}
+                </label>
+                <div class="form-group">
+                    {{ form.gitlab_id }}
+                </div>
+                <button type="submit" class="btn" name="retrieve_project" value="retrieve_project">
+                    {% translate "Confirm" %}
+                </button>
+            </form>
+
+            <form action="{% url 'list_all_projects_homepage' %}" method="get" class="form-inline">
+                <label>
+                    {% trans "Search by id :" %}
+                    <input type="number" placeholder="12345" name="project_id_filter" id="project_id_filter" value="">
+                    <button type="submit" class="btn">{% trans "Filter" %}</button>
+                </label>
+            </form>
+    </div>
     <table class="table table-bordered">
         <tbody>
             {% for project in page_obj %}
@@ -34,7 +46,7 @@
 </div>
 
 {% if page_obj.next_page_number > 1 or page_obj.has_previous %}
-<div class="container">
+<div class="container flex">
     <div class="row">
         <div class="col-md-12 text-center">
             <ul class="pagination">

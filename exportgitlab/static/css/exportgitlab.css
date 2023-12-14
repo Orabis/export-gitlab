@@ -65,6 +65,11 @@
     margin-top: 15px;
 }
 
+.flex{
+    display:flex;
+    justify-content: center;
+}
+
 .vertical-center {
     align-items: center;
 }

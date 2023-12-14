@@ -82,12 +82,20 @@ def user_change_token(request):
 @login_required
 def list_all_projects_homepage(request):
     all_projects = Project.objects.all()
-    paginator = Paginator(all_projects, 10)
+    paginator = Paginator(all_projects, 13)
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
     except NoTokenError:
         return redirect("user_profile")
+
+    if request.GET.get("project_id_filter"):
+        id_filter = request.GET.get("project_id_filter")
+        try:
+            all_projects = Project.objects.filter(gitlab_id=id_filter)
+            paginator = Paginator(all_projects, 13)
+        except ValueError:
+            return redirect("list_all_projects_homepage")
 
     if request.method == "POST":
         form = GitlabIDForm(request.POST)

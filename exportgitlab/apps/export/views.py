@@ -12,17 +12,13 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
-from gitlab import GitlabGetError
+from gitlab import GitlabAuthenticationError, GitlabGetError
 from gitlab.v4.objects import Project as GLProject
 
 from exportgitlab.libs.connect import gl_connection
 
 from .forms import *
 from .models import *
-
-
-class NoTokenError(Exception):
-    pass
 
 
 class PDFGenerationError(Exception):
@@ -39,7 +35,7 @@ def get_token_or_redirect(request):
     user_token = request.user.gitlab_token
     if not user_token:
         messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
-        raise NoTokenError(f"user {request.user.username} has no gitlabtoken")
+        raise GitlabAuthenticationError(f"user {request.user.username} has no or invalid gitlabtoken")
     return user_token
 
 
@@ -92,7 +88,8 @@ def list_all_projects_homepage(request):
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
-    except NoTokenError:
+    except GitlabAuthenticationError:
+        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
         return redirect("user_profile")
 
     if request.GET.get("project_id_filter"):
@@ -141,7 +138,8 @@ def refresh_project(request, id_pj):
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
-    except NoTokenError:
+    except GitlabAuthenticationError:
+        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
         return redirect("user_profile")
 
     project_model = Project.objects.get(id=id_pj)
@@ -167,7 +165,8 @@ def list_all_issues(request, id_pj):
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
-    except NoTokenError:
+    except GitlabAuthenticationError:
+        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
         return redirect("user_profile")
 
     project_model: GLProject = gl.projects.get(project.gitlab_id)
@@ -205,7 +204,8 @@ def download_report_issues(request, id_pj):
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
-    except NoTokenError:
+    except GitlabAuthenticationError:
+        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
         return redirect("user_profile")
     project_model: GLProject = gl.projects.get(project.gitlab_id)
 

@@ -29,6 +29,12 @@ class PDFGenerationError(Exception):
     pass
 
 
+def convert_html(text, default_value="<p>Aucune description</p>"):
+    if text is None:
+        return default_value
+    return markdown2.markdown(text)
+
+
 def get_token_or_redirect(request):
     user_token = request.user.gitlab_token
     if not user_token:
@@ -208,8 +214,8 @@ def download_report_issues(request, id_pj):
         issues_data = []
         for issue_id in issues_list:
             list_issues = project_model.issues.get(issue_id)
-            html_title = markdown2.markdown(list_issues.title)
-            html_description = markdown2.markdown(list_issues.description)
+            html_title = convert_html(list_issues.title)
+            html_description = convert_html(list_issues.description)
             issues_data.append(
                 {
                     "id": issue_id,

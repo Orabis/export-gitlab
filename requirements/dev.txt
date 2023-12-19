@@ -8,6 +8,4 @@ django-extensions
 tox
 black
 isort
-python-gitlab
-markdown2
 pre-commit

@@ -1,6 +1,5 @@
 from .base import *
 
-
 #######################
 # Debug configuration #
 #######################
@@ -44,3 +43,4 @@ for logger in LOGGING['loggers']:
 
 DIPSTRAP_VERSION = '{{ dipstrap_version }}'
 DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
+GITLAB_SESSION_COOKIE = '{{ gitlab_session_cookie }}'

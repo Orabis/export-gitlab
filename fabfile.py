@@ -106,7 +106,9 @@ def test():
     env.goal = "test"
     env.socket_port = ""
     env.socket_host = "127.0.0.1"
-    env.map_settings = {}
+    env.map_settings = {
+        "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
+    }
     execute(build_env)
 
 
@@ -135,6 +137,7 @@ def preprod():
         "default_db_password": "DATABASES['default']['PASSWORD']",
         "default_db_name": "DATABASES['default']['NAME']",
         "secret_key": "SECRET_KEY",
+        "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
     execute(build_env)
 
@@ -164,6 +167,7 @@ def prod():
         "default_db_password": "DATABASES['default']['PASSWORD']",
         "default_db_name": "DATABASES['default']['NAME']",
         "secret_key": "SECRET_KEY",
+        "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
     execute(build_env)
 

@@ -1,6 +1,5 @@
 from .base import *
 
-
 ##########################
 # Database configuration #
 ##########################
@@ -43,3 +42,5 @@ SECRET_KEY = '{{ secret_key }}'
 
 DIPSTRAP_VERSION = '{{ dipstrap_version }}'
 DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
+
+GITLAB_SESSION_COOKIE = '{{ gitlab_session_cookie }}'

@@ -57,6 +57,14 @@
 
     <form method='POST' id="issue_form" action="{% url "download_report_issues" id_pj=project.id%}">
         {% csrf_token %}
+        <div>
+            <label>
+                <input type="radio" name="grp-ungrp" value="group_issue" checked required>{% trans "Download in group" %}
+            </label>
+            <label>
+                <input type="radio" name="grp-ungrp" value="ungroup_issue">{% trans "Download separately" %}
+            </label>
+        </div>
         <button class="btn btn" type="submit">{% trans "Download" %}</button>
         <table class="table">
             <tbody>

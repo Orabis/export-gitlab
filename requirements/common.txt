@@ -3,3 +3,6 @@ psycopg2-binary
 django-extensions
 ipython
 django-cas-sso
+python-gitlab
+markdown2
+beautifulsoup4

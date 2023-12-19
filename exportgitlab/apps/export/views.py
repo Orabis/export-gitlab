@@ -1,63 +1,14 @@
-import base64
-import datetime
-import json
-
-import markdown2
-import requests
-from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
-from gitlab import GitlabAuthenticationError, GitlabGetError
+from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
 
-from exportgitlab.libs.connect import gl_connection
-
+from ...libs.connect import *
+from ...libs.reports_generation import *
 from .forms import *
 from .models import *
-
-
-class PDFGenerationError(Exception):
-    pass
-
-
-def convert_html(text, default_value="<p>Aucune description</p>"):
-    if text is None:
-        return default_value
-    return markdown2.markdown(text)
-
-
-def get_token_or_redirect(request):
-    user_token = request.user.gitlab_token
-    if not user_token:
-        messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
-        raise GitlabAuthenticationError(f"user {request.user.username} has no or invalid gitlabtoken")
-    return user_token
-
-
-def html_to_pdf(html: str) -> bytes:
-    url: str = settings.WKHTML_TO_PDF_URL
-    content: dict[str, str] = {
-        "contents": base64.b64encode(html.encode("utf-8")).decode("utf-8"),
-        "options": {
-            "footer-font-size": "4",
-            "footer-right": "[page] / [topage]",
-            "footer-left": datetime.date.today().strftime("%d %m %Y"),
-        },
-    }
-    headers: dict[str, str] = {
-        "Content-Type": "application/json",
-    }
-    response: requests.Response = requests.post(url, data=json.dumps(content), headers=headers)
-
-    if not response.ok:
-        raise PDFGenerationError(response.content)
-
-    return response.content
 
 
 @login_required
@@ -83,8 +34,8 @@ def user_change_token(request):
 
 @login_required
 def list_all_projects_homepage(request):
-    all_projects = Project.objects.all()
-    paginator = Paginator(all_projects, 13)
+    project_models = Project.objects.all()
+    paginator = Paginator(project_models, 13)
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
@@ -105,11 +56,11 @@ def list_all_projects_homepage(request):
         if form.is_valid():
             project_id = form.cleaned_data["gitlab_id"]
             try:
-                project: GLProject = gl.projects.get(project_id)
+                project_gitlab: GLProject = gl.projects.get(project_id)
                 project_model: Project = form.save(commit=False)
-                project_model.url = project.web_url
-                project_model.name = project.name_with_namespace
-                project_model.description = project.description
+                project_model.url = project_gitlab.web_url
+                project_model.name = project_gitlab.name_with_namespace
+                project_model.description = project_gitlab.description
                 project_model.save()
                 messages.add_message(
                     request,
@@ -160,7 +111,7 @@ def refresh_project(request, id_pj):
 
 @login_required
 def list_all_issues(request, id_pj):
-    project: Project = get_object_or_404(Project, id=id_pj)
+    project_model: Project = get_object_or_404(Project, id=id_pj)
 
     try:
         user_token = get_token_or_redirect(request)
@@ -169,8 +120,8 @@ def list_all_issues(request, id_pj):
         messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
         return redirect("user_profile")
 
-    project_model: GLProject = gl.projects.get(project.gitlab_id)
-    gitlab_labels = project_model.labels.list(get_all=True)
+    gitlab_project: GLProject = gl.projects.get(project_model.gitlab_id)
+    gitlab_labels = gitlab_project.labels.list(get_all=True)
     gitlab_labels_dict = {label.name: label.color for label in gitlab_labels}
 
     if request.GET:
@@ -180,13 +131,13 @@ def list_all_issues(request, id_pj):
         if iid_filter[0] == "":
             iid_filter = None
         if labels_filter == [None]:
-            list_issues = project_model.issues.list(state=opened_closed_filter, iids=iid_filter, get_all=True)
+            list_issues = gitlab_project.issues.list(state=opened_closed_filter, iids=iid_filter, get_all=True)
         else:
-            list_issues = project_model.issues.list(
+            list_issues = gitlab_project.issues.list(
                 state=opened_closed_filter, iids=iid_filter, labels=labels_filter, get_all=True
             )
     else:
-        list_issues = project_model.issues.list(get_all=True, state="opened")
+        list_issues = gitlab_project.issues.list(get_all=True, state="opened")
 
     paginator = Paginator(list_issues, 100)
     page_number = request.GET.get("page")
@@ -194,49 +145,29 @@ def list_all_issues(request, id_pj):
     return render(
         request,
         "export/issues_list.html",
-        {"project": project, "page_obj": page_obj, "gitlab_labels": gitlab_labels_dict},
+        {"project": project_model, "page_obj": page_obj, "gitlab_labels": gitlab_labels_dict},
     )
 
 
 @login_required
 def download_report_issues(request, id_pj):
-    project: Project = get_object_or_404(Project, id=id_pj)
+    project_model: Project = get_object_or_404(Project, id=id_pj)
     try:
         user_token = get_token_or_redirect(request)
         gl = gl_connection(user_token)
     except GitlabAuthenticationError:
         messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
         return redirect("user_profile")
-    project_model: GLProject = gl.projects.get(project.gitlab_id)
+    gitlab_project: GLProject = gl.projects.get(project_model.gitlab_id)
+    issues_list = request.POST.getlist("checkbox_issues")
+    issues_data = []
 
-    if request.method == "POST":
-        issues_list = request.POST.getlist("checkbox_issues")
-        issues_data = []
-        for issue_id in issues_list:
-            list_issues = project_model.issues.get(issue_id)
-            html_title = convert_html(list_issues.title)
-            html_description = convert_html(list_issues.description)
-            issues_data.append(
-                {
-                    "id": issue_id,
-                    "title": html_title,
-                    "description": html_description,
-                }
-            )
-        html = render_to_string("export/html_to_pdf_output.html", {"issues_data": issues_data}, request)
-        try:
-            data = html_to_pdf(html)
-        except PDFGenerationError as e:
-            messages.add_message(request, messages.ERROR, _("ErrorPDF"))
-            raise PDFGenerationError("PDF generation error")
-        response = HttpResponse(data, content_type="application/pdf")
-        if len(issues_list) >= 2:
-            response[
-                "Content-Disposition"
-            ] = f'attachement; filename="issues {issues_list[0]} - {issues_list[-1]}.pdf"'
-        else:
-            response["Content-Disposition"] = f'attachement; filename="issue {issues_list[0]}.pdf"'
-        return response
+    if request.method == "POST" and "ungroup_issue" in request.POST.get("grp-ungrp"):
+        return issues_report_generate_ungroup(request, issues_list, gitlab_project, issues_data, id_pj)
+
+    if request.method == "POST" and "group_issue" in request.POST.get("grp-ungrp"):
+        return issues_report_generate_group(request, issues_list, gitlab_project, issues_data, id_pj)
+
     messages.add_message(request, messages.ERROR, _("Error downloading issues"))
     return redirect("list_all_projects_homepage")
 

@@ -6,3 +6,4 @@ django-cas-sso
 python-gitlab
 markdown2
 beautifulsoup4
+sentry-sdk

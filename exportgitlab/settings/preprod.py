@@ -1,3 +1,6 @@
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 from .base import *
 
 ##########################
@@ -44,3 +47,10 @@ DIPSTRAP_VERSION = '{{ dipstrap_version }}'
 DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
 
 GITLAB_SESSION_COOKIE = '{{ gitlab_session_cookie }}'
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    environment="preprod",
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)

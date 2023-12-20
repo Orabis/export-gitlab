@@ -5,7 +5,7 @@
 
 from os.path import join
 
-import pydiploy
+import pydiploy, sentry
 from fabric.api import env, execute, roles, task
 
 # edit config here !
@@ -109,6 +109,7 @@ def test():
     env.map_settings = {
         "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
+    env.release_name = sentry.get_release_name()
     execute(build_env)
 
 
@@ -139,6 +140,7 @@ def preprod():
         "secret_key": "SECRET_KEY",
         "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
+    env.release_name = sentry.get_release_name()
     execute(build_env)
 
 
@@ -169,6 +171,7 @@ def prod():
         "secret_key": "SECRET_KEY",
         "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
+    env.release_name = sentry.get_release_name()
     execute(build_env)
 
 
@@ -211,6 +214,7 @@ def pre_install_frontend():
 def deploy(update_pkg=False):
     """Deploy code on server"""
     execute(deploy_backend, update_pkg)
+    execute(declare_release_to_sentry)
     execute(deploy_frontend)
 
 
@@ -255,6 +259,10 @@ def post_install_frontend():
     """Post installation of frontend"""
     execute(pydiploy.django.post_install_frontend)
 
+@task
+def declare_release_to_sentry():
+    if env.release_name:
+        execute(sentry.declare_release, release_name=env.release_name)
 
 @roles("web")
 @task

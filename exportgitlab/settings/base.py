@@ -314,3 +314,4 @@ CAS_USERNAME_FORMAT = username_format
 AUTHENTICATION_BACKENDS = ("django_cas.backends.CASBackend",)
 LOGIN_URL = '/cas/login'
 WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'
+SENTRY_DSN = "https://c838390b0adff873f1057b83d460f3b5@sentry.app.unistra.fr/58"

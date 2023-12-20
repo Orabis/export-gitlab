@@ -32,8 +32,8 @@ def user_change_token(request):
     return render(request, "export/change_user_token.html", {"form": form})
 
 
-@login_required
 @gitlab_valid_auth_required
+@login_required
 def list_all_projects_homepage(request):
     project_models = Project.objects.all()
     paginator = Paginator(project_models, 13)
@@ -81,6 +81,7 @@ def list_all_projects_homepage(request):
 
 
 @gitlab_valid_auth_required
+@login_required
 def refresh_project(request, id_pj):
     project_model = Project.objects.get(id=id_pj)
     project_info = request.gl.projects.get(project_model.gitlab_id)

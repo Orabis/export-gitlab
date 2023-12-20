@@ -32,8 +32,8 @@ def user_change_token(request):
     return render(request, "export/change_user_token.html", {"form": form})
 
 
-@gitlab_valid_auth_required
 @login_required
+@gitlab_valid_auth_required
 def list_all_projects_homepage(request):
     project_models = Project.objects.all()
     paginator = Paginator(project_models, 13)
@@ -80,8 +80,8 @@ def list_all_projects_homepage(request):
     return render(request, "export/projects_list.html", {"page_obj": page_obj, "form": form})
 
 
-@gitlab_valid_auth_required
 @login_required
+@gitlab_valid_auth_required
 def refresh_project(request, id_pj):
     project_model = Project.objects.get(id=id_pj)
     project_info = request.gl.projects.get(project_model.gitlab_id)
@@ -99,8 +99,8 @@ def refresh_project(request, id_pj):
     return redirect("list_all_projects_homepage")
 
 
-@gitlab_valid_auth_required
 @login_required
+@gitlab_valid_auth_required
 def list_all_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
     gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
@@ -132,8 +132,8 @@ def list_all_issues(request, id_pj):
     )
 
 
-@gitlab_valid_auth_required
 @login_required
+@gitlab_valid_auth_required
 def download_report_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
     gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)

@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
 
-from ...libs.connect import *
 from ...libs.reports_generation import *
+from .decorators import gitlab_valid_auth_required
 from .forms import *
 from .models import *
 
@@ -33,15 +33,10 @@ def user_change_token(request):
 
 
 @login_required
+@gitlab_valid_auth_required
 def list_all_projects_homepage(request):
     project_models = Project.objects.all()
     paginator = Paginator(project_models, 13)
-    try:
-        user_token = get_token_or_redirect(request)
-        gl = gl_connection(user_token)
-    except GitlabAuthenticationError:
-        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
-        return redirect("user_profile")
 
     if request.GET.get("project_id_filter"):
         id_filter = request.GET.get("project_id_filter")
@@ -56,7 +51,7 @@ def list_all_projects_homepage(request):
         if form.is_valid():
             project_id = form.cleaned_data["gitlab_id"]
             try:
-                project_gitlab: GLProject = gl.projects.get(project_id)
+                project_gitlab: GLProject = request.gl.projects.get(project_id)
                 project_model: Project = form.save(commit=False)
                 project_model.url = project_gitlab.web_url
                 project_model.name = project_gitlab.name_with_namespace
@@ -85,16 +80,10 @@ def list_all_projects_homepage(request):
     return render(request, "export/projects_list.html", {"page_obj": page_obj, "form": form})
 
 
+@gitlab_valid_auth_required
 def refresh_project(request, id_pj):
-    try:
-        user_token = get_token_or_redirect(request)
-        gl = gl_connection(user_token)
-    except GitlabAuthenticationError:
-        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
-        return redirect("user_profile")
-
     project_model = Project.objects.get(id=id_pj)
-    project_info = gl.projects.get(project_model.gitlab_id)
+    project_info = request.gl.projects.get(project_model.gitlab_id)
     Project.name = project_info.name_with_namespace
     Project.description = project_info.description
     Project.url = project_info.web_url
@@ -109,18 +98,11 @@ def refresh_project(request, id_pj):
     return redirect("list_all_projects_homepage")
 
 
+@gitlab_valid_auth_required
 @login_required
 def list_all_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
-
-    try:
-        user_token = get_token_or_redirect(request)
-        gl = gl_connection(user_token)
-    except GitlabAuthenticationError:
-        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
-        return redirect("user_profile")
-
-    gitlab_project: GLProject = gl.projects.get(project_model.gitlab_id)
+    gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
     gitlab_labels = gitlab_project.labels.list(get_all=True)
     gitlab_labels_dict = {label.name: label.color for label in gitlab_labels}
 
@@ -149,16 +131,11 @@ def list_all_issues(request, id_pj):
     )
 
 
+@gitlab_valid_auth_required
 @login_required
 def download_report_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
-    try:
-        user_token = get_token_or_redirect(request)
-        gl = gl_connection(user_token)
-    except GitlabAuthenticationError:
-        messages.add_message(request, messages.ERROR, _("No or invalid Gitlab token"))
-        return redirect("user_profile")
-    gitlab_project: GLProject = gl.projects.get(project_model.gitlab_id)
+    gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
     issues_list = request.POST.getlist("checkbox_issues")
     issues_data = []
 

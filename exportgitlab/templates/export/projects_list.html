@@ -19,8 +19,8 @@
 
             <form action="{% url 'list_all_projects_homepage' %}" method="get" class="form-inline">
                 <label>
-                    {% trans "Search by id :" %}
-                    <input type="number" placeholder="12345" name="project_id_filter" id="project_id_filter" value="">
+                    {% trans "Search by name :" %}
+                    <input type="text" name="project_name_filter" id="project_name_filter" value="">
                     <button type="submit" class="btn">{% trans "Filter" %}</button>
                 </label>
             </form>

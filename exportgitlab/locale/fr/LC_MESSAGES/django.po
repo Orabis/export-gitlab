@@ -39,7 +39,7 @@ msgstr "Projet : [%(project_name)s] ajouté dans la db. id : %(project_id)s"
 
 #: exportgitlab/apps/export/views.py:70
 msgid "Project does not exist"
-msgstr "Le Project n'existe pas"
+msgstr "Le Projet n'existe pas"
 
 #: exportgitlab/apps/export/views.py:72
 msgid "An error occurred while checking the project"

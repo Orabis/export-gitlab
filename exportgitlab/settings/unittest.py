@@ -9,7 +9,6 @@ from .base import *
 
 DEBUG = True
 
-
 ##########################
 # Database configuration #
 ##########################
@@ -45,3 +44,4 @@ for logger in LOGGING['loggers']:
     LOGGING['loggers'][logger]['level'] = 'DEBUG'
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

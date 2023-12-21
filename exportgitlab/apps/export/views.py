@@ -38,13 +38,10 @@ def list_all_projects_homepage(request):
     project_models = Project.objects.all()
     paginator = Paginator(project_models, 13)
 
-    if request.GET.get("project_id_filter"):
-        id_filter = request.GET.get("project_id_filter")
-        try:
-            all_projects = Project.objects.filter(gitlab_id=id_filter)
-            paginator = Paginator(all_projects, 13)
-        except ValueError:
-            return redirect("list_all_projects_homepage")
+    if request.GET.get("project_name_filter"):
+        name_filter = request.GET.get("project_name_filter")
+        all_projects = Project.objects.filter(name__contains=name_filter)
+        paginator = Paginator(all_projects, 13)
 
     if request.method == "POST":
         form = GitlabIDForm(request.POST)

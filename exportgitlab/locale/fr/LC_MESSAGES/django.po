@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-20 09:52+0100\n"
+"POT-Creation-Date: 2023-12-21 16:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,32 +32,32 @@ msgstr "Token Gitlab modifié"
 msgid "Wrong Gitlab token"
 msgstr "Mauvais token Gitlab"
 
-#: exportgitlab/apps/export/views.py:63
+#: exportgitlab/apps/export/views.py:60
 #, python-format
 msgid "Project : [%(project_name)s] added to database. id : %(project_id)s"
 msgstr "Projet : [%(project_name)s] ajouté dans la db. id : %(project_id)s"
 
-#: exportgitlab/apps/export/views.py:70
+#: exportgitlab/apps/export/views.py:67
 msgid "Project does not exist"
 msgstr "Le Projet n'existe pas"
 
-#: exportgitlab/apps/export/views.py:72
+#: exportgitlab/apps/export/views.py:69
 msgid "An error occurred while checking the project"
 msgstr "Une erreur s'est produite lors de la vérification du projet."
 
-#: exportgitlab/apps/export/views.py:74
+#: exportgitlab/apps/export/views.py:71
 #, fuzzy
 #| msgid "GitID invalid (Error in entering the ID) ?"
 msgid "GitID invalid (Error in entering the ID)"
 msgstr "GitID Invalide, (Erreur dans la rentrée de l'id) ?"
 
-#: exportgitlab/apps/export/views.py:94
+#: exportgitlab/apps/export/views.py:92
 #, fuzzy, python-format
 #| msgid "Refresh of [%(project_name)s] complete. id : %(project_id)d"
 msgid "Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d"
 msgstr "Actualisation du projet [%(project_name)s] id : %(project_model_gitlab_id)d"
 
-#: exportgitlab/apps/export/views.py:148
+#: exportgitlab/apps/export/views.py:146
 msgid "Error downloading issues"
 msgstr "Erreur de téléchargement "
 
@@ -196,8 +196,8 @@ msgid "Retrieve project :"
 msgstr "Récupérer le projet :"
 
 #: exportgitlab/templates/export/projects_list.html:22
-msgid "Search by id :"
-msgstr "Rechercher par id :"
+msgid "Search by name :"
+msgstr "Rechercher par nom :"
 
 #: exportgitlab/templates/export/user_profile.html:5
 #: exportgitlab/templates/export/user_profile.html:16

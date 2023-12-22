@@ -58,20 +58,13 @@ def find_img_and_convert(soup, gitlab_project):
     return str(soup)
 
 
-def html_make_data(issue_id, gitlab_project, issues_data):
+def html_make_data(issue_id, gitlab_project):
     list_issues = gitlab_project.issues.get(issue_id)
     html_title = list_issues.title
     html_description = convert_html(list_issues.description)
     soup = BeautifulSoup(html_description, "html.parser")
     html_description = find_img_and_convert(soup, gitlab_project)
-    issues_data.append(
-        {
-            "id": issue_id,
-            "title": html_title,
-            "description": html_description,
-        }
-    )
-    return issues_data
+    return html_title, html_description
 
 
 class PDFGenerationError(Exception):

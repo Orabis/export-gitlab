@@ -138,10 +138,10 @@ def download_report_issues(request, id_pj):
     issues_data = []
 
     if request.method == "POST" and "ungroup_issue" in request.POST.get("grp-ungrp"):
-        return issues_report_generate_ungroup(request, issues_list, gitlab_project, issues_data, id_pj)
+        return issues_report_generate_ungroup(request, issues_list, gitlab_project, id_pj)
 
     if request.method == "POST" and "group_issue" in request.POST.get("grp-ungrp"):
-        return issues_report_generate_group(request, issues_list, gitlab_project, issues_data, id_pj)
+        return issues_report_generate_group(request, issues_list, gitlab_project, id_pj)
 
     messages.add_message(request, messages.ERROR, _("Error downloading issues"))
     return redirect("list_all_projects_homepage")

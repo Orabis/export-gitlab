@@ -9,12 +9,13 @@ from django.utils.translation import gettext_lazy as _
 from exportgitlab.libs.utils import *
 
 
-def issues_report_generate_ungroup(request, issues_list, gitlab_project, issues_data, id_pj):
+def issues_report_generate_ungroup(request, issues_list, gitlab_project, id_pj):
     if len(issues_list) != 0:
         zipped_content = BytesIO()
         with zipfile.ZipFile(zipped_content, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
             for issue_id in issues_list:
-                issues_data = html_make_data(issue_id, gitlab_project, issues_data)
+                html_title, html_description = html_make_data(issue_id, gitlab_project)
+                issues_data = [{"id": issue_id, "title": html_title, "description": html_description}]
                 html = render_to_string("export/html_to_pdf_output.html", {"issues_data": issues_data}, request)
                 try:
                     data = html_to_pdf(html)
@@ -35,10 +36,12 @@ def issues_report_generate_ungroup(request, issues_list, gitlab_project, issues_
         return redirect("list_all_issues", id_pj)
 
 
-def issues_report_generate_group(request, issues_list, gitlab_project, issues_data, id_pj):
+def issues_report_generate_group(request, issues_list, gitlab_project, id_pj):
     if len(issues_list) != 0:
+        issues_data = []
         for issue_id in issues_list:
-            issues_data = html_make_data(issue_id, gitlab_project, issues_data)
+            html_title, html_description = html_make_data(issue_id, gitlab_project)
+            issues_data.append({"id": issue_id, "title": html_title, "description": html_description})
         html = render_to_string("export/html_to_pdf_output.html", {"issues_data": issues_data}, request)
         try:
             data = html_to_pdf(html)

@@ -89,5 +89,3 @@ CAS_SERVER_URL = 'https://cas-dev.unistra.fr/cas/'
 WKHTML_TO_PDF_URL = "http://localhost:8001"
 
 GITLAB_SESSION_COOKIE = environ.get('GITLAB_SESSION_COOKIE', '')
-
-SECRET_KEY = '{{ secret_key }}'

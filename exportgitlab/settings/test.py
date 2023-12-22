@@ -55,3 +55,4 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True,
 )
+SECRET_KEY = '{{ secret_key }}'

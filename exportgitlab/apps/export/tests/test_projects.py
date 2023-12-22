@@ -6,7 +6,10 @@ from django.urls import reverse
 from gitlab import GitlabGetError
 
 from exportgitlab.apps.export.models import *
-from exportgitlab.apps.export.views import list_all_projects_homepage
+from exportgitlab.apps.export.views import (
+    list_all_projects_homepage,
+    refresh_project,
+)
 
 
 class ProjectsTest(TestCase):
@@ -14,7 +17,7 @@ class ProjectsTest(TestCase):
         self.url = reverse("list_all_projects_homepage")
         self.project = Project.objects.create(gitlab_id="12345", name="TestPj", description=None, url="TestPj/")
         self.user = User.objects.create_user(username="JohnPork", gitlab_token="gyyat1234")
-        mock_gitlab = patch("exportgitlab.libs.connect.gitlab")
+        mock_gitlab = patch("exportgitlab.libs.gitlab.gitlab")
         mock_gitlab.start()
         self.addCleanup(mock_gitlab.stop)
 
@@ -45,8 +48,8 @@ class ProjectsTest(TestCase):
         self.assertEqual(project_context.object_list.pop(), self.project)
         self.assertEqual(response.status_code, 200)
 
-    def test_create_project(self):
-        with patch("exportgitlab.libs.connect.gitlab.Gitlab") as gl_mock:
+    def test_create_project_post(self):
+        with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
             project_mock = gl_mock().projects.get.return_value
             project_mock.name_with_namespace = "Testgyat"
             project_mock.web_url = "https://example.com"
@@ -61,19 +64,48 @@ class ProjectsTest(TestCase):
                 project_mock.name_with_namespace, Project.objects.get(name=project_mock.name_with_namespace).name
             )
 
-    def test_create_project_error(self):
-        with patch("exportgitlab.libs.connect.gitlab.Gitlab") as gl_mock:
+    def test_create_project_error_invalid_form(self):
+        self.client.force_login(self.user)
+        data = {"gyat": "test", "bdfgf": "hdfhdf74"}
+        response = self.client.post(self.url, data)
+        self.assertEqual(
+            str(response.wsgi_request._messages._loaded_messages[0]), "GitID invalid (Error in entering the ID)"
+        )
+
+    def test_create_project_error_404(self):
+        with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
             gl_mock().projects.get.side_effect = GitlabGetError(response_code=404)
-            request = RequestFactory().post(reverse("list_all_projects_homepage"), data={"gitlab_id": 1})
+            error_message, response = self.make_request(gl_mock)
+            self.assertEqual("Le Projet n'existe pas", error_message)
+            self.assertEqual(response.status_code, 200)
+
+    def test_create_project_error_504(self):
+        with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
+            gl_mock().projects.get.side_effect = GitlabGetError(response_code=504)
+            error_message, response = self.make_request(gl_mock)
+            self.assertEqual("Une erreur s'est produite lors de la vérification du projet.", error_message)
+            self.assertEqual(response.status_code, 200)
+
+    def make_request(self, gl_mock):
+        request = RequestFactory().post(reverse("list_all_projects_homepage"), data={"gitlab_id": 1})
+        request._messages = messages.storage.default_storage(request)
+        request.user = self.user
+        request.gl = gl_mock
+        response = list_all_projects_homepage(request)
+        error_message = [m.message for m in request._messages][0]
+        return error_message, response
+
+    def test_refresh_project(self):
+        with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
+            project_mock = gl_mock().projects.get.return_value
+            project_mock.gitlab_id = 12345
+            project_mock.name_with_namespace = "TestPjModified"
+            project_mock.web_url = "https://example.com"
+            project_mock.description = "Test description"
+            request = RequestFactory().get(reverse("refresh_project", kwargs={"id_pj": self.project.id}))
             request._messages = messages.storage.default_storage(request)
             request.user = self.user
             request.gl = gl_mock
-            response = list_all_projects_homepage(request)
-            error_message = [m.message for m in request._messages][0]
-            self.assertEqual("Le Project n'existe pas", error_message)
-            self.assertEqual(response.status_code, 200)
-
-    # def test_refresh_project_(self):
-    #    with patch("exportgitlab.libs.connect.gitlab.Gitlab") as gl_mock:
-    #        project_mock = gl_mock().projects.get.return_value
-    #        project_mock.name_with_namespace = "Testgyat"
+            refresh_project(request, self.project.id)
+            self.project.refresh_from_db()
+            self.assertEqual(self.project.name, "TestPjModified")

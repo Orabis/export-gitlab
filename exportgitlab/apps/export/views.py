@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
 
+from ...libs.gitlab import get_issues, get_labels_list
 from ...libs.reports_generation import *
 from .decorators import gitlab_valid_auth_required
 from .forms import *
@@ -82,15 +83,15 @@ def list_all_projects_homepage(request):
 def refresh_project(request, id_pj):
     project_model = Project.objects.get(id=id_pj)
     project_info = request.gl.projects.get(project_model.gitlab_id)
-    Project.name = project_info.name_with_namespace
-    Project.description = project_info.description
-    Project.url = project_info.web_url
-    Project.objects.update()
+    project_model.name = project_info.name_with_namespace
+    project_model.description = project_info.description
+    project_model.url = project_info.web_url
+    project_model.save()
     messages.add_message(
         request,
         messages.SUCCESS,
         _("Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d")
-        % {"project_name": Project.name, "project_model_gitlab_id": project_model.gitlab_id},
+        % {"project_name": project_model.name, "project_model_gitlab_id": project_model.gitlab_id},
     )
 
     return redirect("list_all_projects_homepage")
@@ -101,24 +102,12 @@ def refresh_project(request, id_pj):
 def list_all_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
     gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
-    gitlab_labels = gitlab_project.labels.list(get_all=True)
-    gitlab_labels_dict = {label.name: label.color for label in gitlab_labels}
+    gitlab_labels_dict = get_labels_list(gitlab_project)
+    iid_filter = [request.GET.get("iid")]
+    labels_filter = request.GET.getlist("lab")
+    opened_closed_filter = request.GET.get("oc")
 
-    if request.GET:
-        iid_filter = [request.GET.get("iid")]
-        labels_filter = request.GET.getlist("lab")
-        opened_closed_filter = request.GET.get("oc")
-        if iid_filter[0] == "":
-            iid_filter = None
-        if labels_filter == [None]:
-            list_issues = gitlab_project.issues.list(state=opened_closed_filter, iids=iid_filter, get_all=True)
-        else:
-            list_issues = gitlab_project.issues.list(
-                state=opened_closed_filter, iids=iid_filter, labels=labels_filter, get_all=True
-            )
-    else:
-        list_issues = gitlab_project.issues.list(get_all=True, state="opened")
-
+    list_issues = get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter)
     paginator = Paginator(list_issues, 100)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -135,7 +124,6 @@ def download_report_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
     gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
     issues_list = request.POST.getlist("checkbox_issues")
-    issues_data = []
 
     if request.method == "POST" and "ungroup_issue" in request.POST.get("grp-ungrp"):
         return issues_report_generate_ungroup(request, issues_list, gitlab_project, id_pj)

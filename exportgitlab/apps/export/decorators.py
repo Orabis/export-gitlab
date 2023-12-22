@@ -2,7 +2,7 @@ from functools import wraps
 
 from django.shortcuts import redirect
 
-from exportgitlab.libs.connect import gl_connection
+from exportgitlab.libs.gitlab import gl_connection
 from exportgitlab.libs.utils import *
 
 

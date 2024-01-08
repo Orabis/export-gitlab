@@ -16,9 +16,6 @@ class GitlabConnectTest(TestCase):
         mock_gitlab.Gitlab.assert_called_with(url="https://git.unistra.fr", private_token="test1234")
         mock_gitlab.auth.called_once()
 
-    def test_gitlab_connection_error(self):
-        ...
-
     def test_gitlab_get_labels(self):
         with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
             gitlab_project = gl_mock().projects.get.return_value
@@ -42,10 +39,30 @@ class GitlabConnectTest(TestCase):
             )
 
     def test_gitlab_get_issues_with_id_and_no_labels(self):
-        ...
+        with patch("exportgitlab.libs.gitlab.gitlab") as gl_mock:
+            gitlab_project = gl_mock().projects.get.return_value
+            opened_closed_filter = "opened"
+            iid_filter = ["130,127"]
+            labels_filter = [""]
+            get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter)
+            gitlab_project.issues.list.assert_called_with(get_all=True, state=opened_closed_filter, iids=iid_filter)
 
     def test_gitlab_get_issues_with_no_id_and_no_labels(self):
-        ...
+        with patch("exportgitlab.libs.gitlab.gitlab") as gl_mock:
+            gitlab_project = gl_mock().projects.get.return_value
+            opened_closed_filter = "opened"
+            iid_filter = [""]
+            labels_filter = [""]
+            get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter)
+            gitlab_project.issues.list.assert_called_with(get_all=True, state=opened_closed_filter)
 
     def test_gitlab_get_issues_with_id_and_labels(self):
-        ...
+        with patch("exportgitlab.libs.gitlab.gitlab") as gl_mock:
+            gitlab_project = gl_mock().projects.get.return_value
+            opened_closed_filter = "opened"
+            iid_filter = ["130,127"]
+            labels_filter = ["label1", "label2"]
+            get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter)
+            gitlab_project.issues.list.assert_called_with(
+                get_all=True, state=opened_closed_filter, iids=iid_filter, labels=labels_filter
+            )

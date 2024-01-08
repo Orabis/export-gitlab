@@ -81,18 +81,24 @@ def list_all_projects_homepage(request):
 @login_required
 @gitlab_valid_auth_required
 def refresh_project(request, id_pj):
-    project_model = Project.objects.get(id=id_pj)
-    project_info = request.gl.projects.get(project_model.gitlab_id)
-    project_model.name = project_info.name_with_namespace
-    project_model.description = project_info.description
-    project_model.url = project_info.web_url
-    project_model.save()
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        _("Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d")
-        % {"project_name": project_model.name, "project_model_gitlab_id": project_model.gitlab_id},
-    )
+    try:
+        project_model = Project.objects.get(id=id_pj)
+        project_info = request.gl.projects.get(project_model.gitlab_id)
+        project_model.name = project_info.name_with_namespace
+        project_model.description = project_info.description
+        project_model.url = project_info.web_url
+        project_model.save()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _("Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d")
+            % {"project_name": project_model.name, "project_model_gitlab_id": project_model.gitlab_id},
+        )
+    except GitlabGetError as e:
+        if e.response_code == 404:
+            messages.add_message(request, messages.ERROR, _("Project does not exist"))
+        else:
+            messages.add_message(request, messages.ERROR, _("An error occurred while checking the project"))
 
     return redirect("list_all_projects_homepage")
 

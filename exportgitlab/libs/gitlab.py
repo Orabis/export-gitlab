@@ -20,6 +20,6 @@ def get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter):
     }
     if iid_filter[0] != "":
         params["iids"] = iid_filter
-    elif labels_filter != [None]:
+    if labels_filter != [""]:
         params["labels"] = labels_filter
     return gitlab_project.issues.list(**params)

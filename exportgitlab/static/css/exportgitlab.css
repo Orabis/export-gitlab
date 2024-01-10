@@ -64,6 +64,9 @@
 .button_form {
     margin-top: 15px;
 }
+.project-id-name-refresh a{
+    padding-right:5px;
+}
 
 .flex{
     display:flex;
@@ -95,6 +98,21 @@ white-space: nowrap !important; / 1 /
 .labels_filter{
     display:grid;
     grid-template-columns: 1fr 1fr;
+
+}
+.check-all{
+    padding-left:8px;
+    margin-top:25px
+}
+.download-group{
+    display:flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-left:8px;
+}
+
+.download-group button{
+    margin-top: 3px;
 }
 .status-group{
     margin-top:15px

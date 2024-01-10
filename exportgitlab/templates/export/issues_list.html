@@ -45,7 +45,9 @@
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="checkbox_{{ label }}" name="lab" value="{{ label }}">
                                 <label for="checkbox_{{ label }}">
-                                    <span style="background-color:{{ gitlab_labels|get_value:label }}" class="label label-default">{{ label }}</span>
+                                    {% with color=gitlab_labels|get_value:label %}
+                                    <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label label-default">{{ label }}</span>
+                                    {% endwith %}
                                 </label>    
                             </div>
                         {% endfor %}
@@ -57,44 +59,48 @@
 
     <form method='POST' id="issue_form" action="{% url "download_report_issues" id_pj=project.id%}">
         {% csrf_token %}
-        <div>
+        <div class="download-group">
             <label>
                 <input type="radio" name="grp-ungrp" value="group_issue" checked required>{% trans "Download in group" %}
             </label>
             <label>
                 <input type="radio" name="grp-ungrp" value="ungroup_issue">{% trans "Download separately" %}
             </label>
+            <button class="btn btn" type="submit">{% trans "Download" %}</button>
         </div>
-        <button class="btn btn" type="submit">{% trans "Download" %}</button>
+    
+        <div class="check-all">
+            <input type="checkbox" id="selectAll"/>
+            <label for="selectAll">
+                <span id="check_all_on" style="display: block;">
+                    {% trans "Check all" %}
+                </span>
+                <span id="check_all_off" style="display: none;">
+                    {% trans "Uncheck all" %}
+                </span>
+            </label>
+        </div>
         <table class="table">
             <tbody>
-                <input type="checkbox" id="selectAll"/>
-                <label for="selectAll">
-                    <span id="check_all_on" style="display: block;">
-                        {% trans "Check all" %}
-                    </span>
-                    <span id="check_all_off" style="display: none;">
-                        {% trans "Uncheck all" %}
-                    </span>
-                </label>
-    
-                    {% for issue in page_obj %}
-                        <tr>
-                            <td>
-                                <input class="form-check-input" type="checkbox" name="checkbox_issues" id="issue_{{issue.iid }}" value="{{ issue.iid }}">
-                                <label for="issue_{{issue.iid }}">
-                                    <span>{{ issue.iid }} - {{ issue.title }}</span>
-                                    <span class="text-muted">{{ issue.author.name }}</span>
-                                </label>
-                                <div style="margin-bottom: auto">
-                                    {% for tag in issue.labels %}
-                                        <span style="background-color:{{ gitlab_labels|get_value:tag }}" class="label">{{ tag }}</span>
-                                    {% endfor %}
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                {% for issue in page_obj %}
+                    <tr>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="checkbox_issues" id="issue_{{issue.iid }}" value="{{ issue.iid }}">
+                            <label for="issue_{{issue.iid }}">
+                                <span>{{ issue.iid }} - {{ issue.title }}</span>
+                                <span class="text-muted">{{ issue.author.name }}</span>
+                            </label>
+                            <div style="margin-bottom: auto">
+                                {% for tag in issue.labels %}
+                                    {% with color=gitlab_labels|get_value:tag %}
+                                        <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label">{{ tag }}</span>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </form>
 </div>

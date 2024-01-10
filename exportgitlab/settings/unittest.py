@@ -45,3 +45,4 @@ for logger in LOGGING['loggers']:
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+GITLAB_SESSION_COOKIE = environ.get('GITLAB_SESSION_COOKIE', '')

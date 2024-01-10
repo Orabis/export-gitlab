@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
@@ -130,15 +131,16 @@ def download_report_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
     gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
     issues_list = request.POST.getlist("checkbox_issues")
+    try:
+        if request.method == "POST" and "ungroup_issue" in request.POST.get("grp-ungrp"):
+            return issues_report_generate_ungroup(request, issues_list, gitlab_project, id_pj)
 
-    if request.method == "POST" and "ungroup_issue" in request.POST.get("grp-ungrp"):
-        return issues_report_generate_ungroup(request, issues_list, gitlab_project, id_pj)
-
-    if request.method == "POST" and "group_issue" in request.POST.get("grp-ungrp"):
-        return issues_report_generate_group(request, issues_list, gitlab_project, id_pj)
-
+        if request.method == "POST" and "group_issue" in request.POST.get("grp-ungrp"):
+            return issues_report_generate_group(request, issues_list, gitlab_project, id_pj)
+    except TypeError:
+        pass
     messages.add_message(request, messages.ERROR, _("Error downloading issues"))
-    return redirect("list_all_projects_homepage")
+    return redirect(reverse("list_all_issues", kwargs={"id_pj": id_pj}))
 
 
 def index(request):

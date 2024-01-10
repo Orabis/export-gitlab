@@ -1,0 +1,97 @@
+{
+  "id": 33601,
+  "iid": 1,
+  "project_id": 34755,
+  "title": "Modèle de données Nomenclatures - Enrichissement des nomenclatures existantes",
+  "description": "## Description des nomenclatures existantes à enrichir\n\nNb : les noms d'attributs en gras correspondent aux attributs actuels ; les autres sont à ajouter. Les nouveaux attributs sont libellés en français dans l'issue, je vous laisse traduire comme bon vous semble ...\n\n**DiplomaType  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**RegistrationCategory  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**StudentStatus  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**SocialStatus  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**ExternalType --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**Link  --> OK MCD**\n\n- code\n- is_active\n- is_multiple\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**NationalUniversitiesCouncil --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**SecondaryDiscipline --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n- \n**StaffCategory --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**Grade  --> OK MCD** \n\n- code\n- staff_category\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**BAPReferens --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**ContractStatus  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**StatutoryPosition --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**HostedType  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**FunctionType  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**HumanRessourceFunction  --> OK MCD** \n\n- code\n- function_type\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**PopulationCategory  --> OK MCD** \n\n**Nb : la gestion des correspondances avec les flags LDAP est déportée dans #3**\n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n- weight\n\n**StructureNature  --> OK MCD**  (= Nature de structure)\n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**StructureStatus --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**StructureNatureType  --> OK MCD**  (= Type de structure)\n\n_**Modification 19/09/2023 : un type peut être lié à plusieurs natures ... il faut ajouter une table de liens en remplacement de nature_type (voir #2)**_\n\n_**Modification 18/11/2023 : ajout des attributs de classifications SISE, foreign keys de nomenclatures déjà créées**_\n\n- code\n- is_active\n- label\n- short_label\n- **establishment_type** _foreign key de EstablishmentType, non obligatoire_\n- **sise_situation** _foreign key de SiseSituation, non obligatoire_\n- validity_begin_date\n- validity_end_date\n\n**AddressType  --> OK MCD** \n\n- code\n- is_active\n- is_person\n- is_structure\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**AddressStreetType  --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**Department --> OK MCD** \n\n- code\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n**Country**\n\n_**Modification 26/11/2023 : ajout d'un id auto et des codes iso alpha-2, alpha-3 et alpha-4 de la norme ISO3166-3**_\n\n- **id (auto)**\n- **code** _correspond à l'alpha-2 de la norme_\n- **iso_alpha3**\n- **iso_alpha4**\n- is_active\n- label\n- short_label\n- validity_begin_date\n- validity_end_date\n\n\n## CRITERES D'ACCEPTATION \n\n- Validation à l'appui d'un nouveau MCD Nomenclatures ?",
+  "state": "opened",
+  "created_at": "2023-09-06T09:09:45.328Z",
+  "updated_at": "2023-11-30T14:24:58.072Z",
+  "closed_at": null,
+  "closed_by": null,
+  "labels": [
+    "Test",
+    "Testtt"
+  ],
+  "milestone": {
+    "id": 2376,
+    "iid": 1,
+    "project_id": 34755,
+    "title": "Sprint 0",
+    "description": "",
+    "state": "active",
+    "created_at": "2023-11-10T08:42:51.200Z",
+    "updated_at": "2023-11-10T08:42:51.200Z",
+    "due_date": "2023-11-10",
+    "start_date": "2023-09-04",
+    "expired": true,
+    "web_url": "https://git.oui.fr/comment/test/non/-/milestones/1"
+  },
+  "assignees": [
+    {
+      "id": 24,
+      "username": "hello",
+      "name": "HELLO WORLD",
+      "state": "active",
+      "locked": false,
+      "avatar_url": null,
+      "web_url": "https://git.oui.fr/hello"
+    }
+  ],
+  "author": {
+    "id": 673,
+    "username": "goodbye",
+    "name": "GOODBYE FRIEND",
+    "state": "active",
+    "locked": false,
+    "avatar_url": null,
+    "web_url": "https://git.oui.fr/goodbye"
+  },
+  "type": "ISSUE",
+  "assignee": {
+    "id": 24,
+    "username": "good.morning",
+    "name": "GOOD MORNING",
+    "state": "active",
+    "locked": false,
+    "avatar_url": null,
+    "web_url": "https://git.oui.fr/goodmorning"
+  },
+  "user_notes_count": 7,
+  "merge_requests_count": 0,
+  "upvotes": 0,
+  "downvotes": 0,
+  "due_date": null,
+  "confidential": false,
+  "discussion_locked": null,
+  "issue_type": "issue",
+  "web_url": "https://git.oui.fr/comment/test/non/-/milestones/1",
+  "time_stats": {
+    "time_estimate": 0,
+    "total_time_spent": 0,
+    "human_time_estimate": null,
+    "human_total_time_spent": null
+  },
+  "task_completion_status": {
+    "count": 0,
+    "completed_count": 0
+  },
+  "has_tasks": true,
+  "task_status": "0 of 0 checklist items completed",
+  "_links": {
+    "self": "https://git.oui.fr/comment/test/non/-/milestones/1",
+    "notes": "https://git.oui.fr/comment/test/non/-/milestones/1",
+    "award_emoji": "https://git.oui.fr/comment/test/non/-/milestones/1",
+    "project": "https://git.oui.fr/comment/test/non/-/milestones/1",
+    "closed_as_duplicate_of": null
+  },
+  "references": {
+    "short": "#1",
+    "relative": "#1",
+    "full": "dssdsd/dsds/dsds#1"
+  },
+  "severity": "UNKNOWN",
+  "subscribed": false,
+  "moved_to_id": null,
+  "service_desk_reply_to": null
+}

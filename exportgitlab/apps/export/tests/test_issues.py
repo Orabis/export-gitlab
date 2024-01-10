@@ -1,39 +1,61 @@
-from unittest.mock import MagicMock, Mock, patch
+import json
+from http import HTTPStatus
 
-from django.test import RequestFactory, TestCase
+import responses
+from django.test import TestCase
 from django.urls import reverse
 
-from exportgitlab.apps.export.models import *
-from exportgitlab.apps.export.views import (
-    list_all_issues,
-    list_all_projects_homepage,
-)
+from exportgitlab.apps.export.models import Project, User
 
-# class IssuesTest(TestCase):
-#    def setUp(self):
-#        self.project = Project.objects.create(gitlab_id="12345", name="TestPj", description=None, url="TestPj/")
-#        self.url = reverse("list_all_issues", kwargs={"id_pj": self.project.id})
-#        self.user = User.objects.create_user(username="JohnPork", gitlab_token="gyyat1234")
-#        self.client.force_login(self.user)
-#        mock_gitlab = patch("exportgitlab.libs.gitlab.gitlab")
-#        mock_gitlab.start()
-#        self.addCleanup(mock_gitlab.stop)
-#
-#
-# def test_valid_parameter_filter_issues(self):
-#     with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
-#         project_mock = gl_mock().projects.get.return_value
-#         project_mock.gitlab_id = 1
-#         label1 = Mock()
-#         label2 = Mock()
-#         label1.configure_mock(name="labeltest1", color="red")
-#         label2.configure_mock(name="labeltest2", color="yellow")
-#         project_mock.labels.list.return_value = [label1, label2]
-#         project_mock.issues.list.return_value = []
-#         request = RequestFactory().get(
-#             self.url, data={"iid": "123", "lab": ["labeltest1", "labeltest2"], "oc": "open"}
-#         )
-#         request.user = self.user
-#         request.gl = gl_mock
-#         response = list_all_issues(request, self.project.id)
-#         self.assertEqual()
+with open("exportgitlab/apps/export/tests/fixtures/user_request.json") as f:
+    user_json = json.load(f)
+
+with open("exportgitlab/apps/export/tests/fixtures/project_request.json") as f:
+    project_json = json.load(f)
+
+with open("exportgitlab/apps/export/tests/fixtures/labels_request.json") as f:
+    labels_json = json.load(f)
+
+with open("exportgitlab/apps/export/tests/fixtures/issues_request.json") as f:
+    issues_json = json.load(f)
+
+
+def get_profile_response() -> responses.Response:
+    response = responses.Response(
+        method=responses.GET,
+        url="https://git.unistra.fr/api/v4/user",
+        json=user_json,
+    )
+    return response
+
+
+class IssuesViewTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="John", gitlab_token="gyyat1234")
+        self.project = Project.objects.create(gitlab_id="34755", name="TestPj", description=None, url="TestPj/")
+
+    @responses.activate
+    def test_view_issues(self):
+        responses.add(get_profile_response())
+        responses.add(
+            responses.GET,
+            "https://git.unistra.fr/api/v4/projects/34755",
+            json=project_json,
+        )
+        responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/labels", json=labels_json)
+        responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/issues?labels=", json=issues_json)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("list_all_issues", kwargs={"id_pj": self.project.id}))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn(
+            issues_json[0]["title"],
+            response.content.decode("utf-8"),
+        )
+        self.assertIn(
+            str(project_json["id"]),
+            response.content.decode("utf-8"),
+        )
+        self.assertIn(
+            labels_json[0]["name"],
+            response.content.decode("utf-8"),
+        )

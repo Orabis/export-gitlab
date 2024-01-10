@@ -1,0 +1,222 @@
+[
+  {
+    "id": 6879,
+    "name": "A corriger",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#dc143c",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6646,
+    "name": "Accueil et ergonomie générale",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#330066",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6805,
+    "name": "Administration",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#009966",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6959,
+    "name": "DIP",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#6699cc",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6622,
+    "name": "Doing",
+    "description": "",
+    "description_html": "",
+    "text_color": "#1F1E24",
+    "color": "#8fbc8f",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6960,
+    "name": "Imports",
+    "description": null,
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#6699cc",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6934,
+    "name": "Intendance",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#c21e56",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6636,
+    "name": "LDAP",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#808080",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6619,
+    "name": "Nomenclatures",
+    "description": "",
+    "description_html": "",
+    "text_color": "#1F1E24",
+    "color": "#FF9900",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6623,
+    "name": "OK Métiers",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#6699cc",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6877,
+    "name": "OK pour Déploiement PPRD",
+    "description": "",
+    "description_html": "",
+    "text_color": "#1F1E24",
+    "color": "#e6e6fa",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6621,
+    "name": "Personnes",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#c21e56",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6624,
+    "name": "Review",
+    "description": "",
+    "description_html": "",
+    "text_color": "#1F1E24",
+    "color": "#eee600",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6874,
+    "name": "STAND-BY",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#dc143c",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6620,
+    "name": "Structures",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#FF00FF",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6627,
+    "name": "Test OK",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#009966",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6625,
+    "name": "To do",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#ed9121",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6626,
+    "name": "To test",
+    "description": "",
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#6699cc",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 7025,
+    "name": "V2",
+    "description": "",
+    "description_html": "",
+    "text_color": "#1F1E24",
+    "color": "#CCFF66",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  },
+  {
+    "id": 6961,
+    "name": "Validation des données",
+    "description": null,
+    "description_html": "",
+    "text_color": "#FFFFFF",
+    "color": "#009966",
+    "subscribed": false,
+    "priority": null,
+    "is_project_label": true
+  }
+]

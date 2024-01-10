@@ -95,6 +95,15 @@ class ProjectsTest(TestCase):
         error_message = [m.message for m in request._messages][0]
         return error_message, response
 
+    def make_request_data(self, gl_mock):
+        request = RequestFactory().get(reverse("refresh_project", kwargs={"id_pj": self.project.id}))
+        request._messages = messages.storage.default_storage(request)
+        request.user = self.user
+        request.gl = gl_mock
+        response = refresh_project(request, self.project.id)
+        error_message = [m.message for m in request._messages][0]
+        return error_message, response
+
     def test_refresh_project(self):
         with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
             project_mock = gl_mock().projects.get.return_value
@@ -102,10 +111,20 @@ class ProjectsTest(TestCase):
             project_mock.name_with_namespace = "TestPjModified"
             project_mock.web_url = "https://example.com"
             project_mock.description = "Test description"
-            request = RequestFactory().get(reverse("refresh_project", kwargs={"id_pj": self.project.id}))
-            request._messages = messages.storage.default_storage(request)
-            request.user = self.user
-            request.gl = gl_mock
-            refresh_project(request, self.project.id)
+            self.make_request_data(gl_mock)
             self.project.refresh_from_db()
             self.assertEqual(self.project.name, "TestPjModified")
+
+    def test_refresh_error_404(self):
+        with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
+            gl_mock().projects.get.side_effect = GitlabGetError(response_code=404)
+            error_message, response = self.make_request_data(gl_mock)
+            self.assertEqual("Le Projet n'existe pas", error_message)
+            self.assertEqual(response.status_code, 302)
+
+    def test_refresh_error_504(self):
+        with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
+            gl_mock().projects.get.side_effect = GitlabGetError(response_code=504)
+            error_message, response = self.make_request_data(gl_mock)
+            self.assertEqual("Une erreur s'est produite lors de la vérification du projet.", error_message)
+            self.assertEqual(response.status_code, 302)

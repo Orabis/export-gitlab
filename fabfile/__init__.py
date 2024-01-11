@@ -123,21 +123,21 @@ def test():
 def preprod():
     """Define preprod stage"""
     env.roledefs = {
-        "web": ["exportgitlab-pprd.net"],
-        "lb": ["lb.exportgitlab-pprd.net"],
+        "web": ["django-pprd-w3.di.unistra.fr", "django-pprd-w4.di.unistra.fr"],
+        "lb": ["rp-dip.pprd-public.di.unistra.fr"],
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs["web"]
-    env.server_name = "exportgitlab-pprd.net"
-    env.short_server_name = "exportgitlab-pprd"
+    env.server_name = "export-gitlab-pprd.app.unistra.fr"
+    env.short_server_name = "export-gitlab-pprd"
     env.static_folder = "/site_media/"
-    env.server_ip = ""
+    env.server_ip = "130.79.245.212"
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = "/etc/ssl/certs/exportgitlab.net.pem"
-    env.path_to_cert_key = "/etc/ssl/private/exportgitlab.net.key"
+    env.path_to_cert = "/etc/ssl/certs/mega_wildcard.pem"
+    env.path_to_cert_key = "/etc/ssl/private/mega_wildcard.key"
     env.goal = "preprod"
-    env.socket_port = ""
+    env.socket_port = "8026"
     env.map_settings = {
         "default_db_host": "DATABASES['default']['HOST']",
         "default_db_user": "DATABASES['default']['USER']",
@@ -154,21 +154,21 @@ def preprod():
 def prod():
     """Define prod stage"""
     env.roledefs = {
-        "web": ["exportgitlab.net"],
-        "lb": ["lb.exportgitlab.net"],
+        "web": ["django-w7.di.unistra.fr", "django-w8.di.unistra.fr"],
+        "lb": ["rp-dip-public-m.di.unistra.fr", "rp-dip-public-s.di.unistra.fr"],
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs["web"]
-    env.server_name = "exportgitlab.net"
-    env.short_server_name = "exportgitlab"
+    env.server_name = "export-gitlab.app.unistra.fr"
+    env.short_server_name = "export-gitlab"
     env.static_folder = "/site_media/"
-    env.server_ip = ""
+    env.server_ip = "130.79.245.214"
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = "/etc/ssl/certs/exportgitlab.net.pem"
-    env.path_to_cert_key = "/etc/ssl/private/exportgitlab.net.key"
+    env.path_to_cert = "/etc/ssl/certs/mega_wildcard.pem"
+    env.path_to_cert_key = "/etc/ssl/private/mega_wildcard.key"
     env.goal = "prod"
-    env.socket_port = ""
+    env.socket_port = "8016"
     env.map_settings = {
         "default_db_host": "DATABASES['default']['HOST']",
         "default_db_user": "DATABASES['default']['USER']",

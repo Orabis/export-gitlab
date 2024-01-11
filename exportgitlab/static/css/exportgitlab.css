@@ -109,6 +109,7 @@ white-space: nowrap !important; / 1 /
     align-items: flex-start;
     flex-direction: column;
     padding-left:8px;
+    margin-top: 3px;
 }
 
 .download-group button{

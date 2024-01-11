@@ -16,21 +16,21 @@
         <form method="GET" action="{% url "list_all_issues" id_pj=project.id%}">
             <div class="row">
                 <div class="col-md-2">
-                    <div class="ids_form">
-                        <label for="iids">ID:</label>
+                    <label for="iids">
+                        ID:
                         <input class="form-control" name="iid" id="iids" value="" placeholder="1,2,3,4">
-                    </div>
+                    </label>
                     <div class="status-group">
                         <label>{% trans "Status :" %}</label>
                         <div class="open-close">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="oc" id="opened" value="opened" checked required>
-                                <label class="form-check-label" for="opened">{% trans "Open" %}</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="oc" id="closed" value="closed">
-                                <label class="form-check-label" for="closed">{% trans  "Close" %}</label>
-                            </div>
+                            <label for="opened">
+                                <input type="radio" name="oc" id="opened" value="opened" checked required>
+                                {% trans "Open" %}
+                            </label>
+                            <label for="closed">
+                                <input type="radio" name="oc" id="closed" value="closed">
+                                {% trans  "Close" %}
+                            </label>
                         </div>
                     </div>
                     <div class="button_form">
@@ -60,15 +60,16 @@
     <form method='POST' id="issue_form" action="{% url "download_report_issues" id_pj=project.id%}">
         {% csrf_token %}
         <div class="download-group">
-            <label>
-                <input type="radio" name="grp-ungrp" value="group_issue" checked required>{% trans "Download in group" %}
+            <label for="group_issue">
+                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" checked required>
+                {% trans "Download in group" %}
             </label>
-            <label>
-                <input type="radio" name="grp-ungrp" value="ungroup_issue">{% trans "Download separately" %}
+            <label for="ungroup_issue">
+                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue">
+                {% trans "Download separately" %}
             </label>
             <button class="btn btn" type="submit">{% trans "Download" %}</button>
         </div>
-    
         <div class="check-all">
             <input type="checkbox" id="selectAll"/>
             <label for="selectAll">

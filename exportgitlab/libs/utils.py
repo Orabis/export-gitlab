@@ -14,7 +14,7 @@ from gitlab import GitlabAuthenticationError
 def convert_html(text, default_value="<p>Aucune description</p>"):
     if text is None:
         return default_value
-    return markdown2.markdown(text)
+    return markdown2.markdown(text, extras=["tables"])
 
 
 def html_to_pdf(html: str) -> bytes:
@@ -41,8 +41,9 @@ def html_to_pdf(html: str) -> bytes:
 def get_token_or_redirect(request):
     user_token = request.user.gitlab_token
     if not user_token:
-        messages.add_message(request, messages.WARNING, _("No Gitlab token found"))
-        raise GitlabAuthenticationError(f"user {request.user.username} has no or invalid gitlabtoken")
+        raise GitlabAuthenticationError(
+            _("user %(username)s has no GitLab Token") % {"username": request.user.username}
+        )
     return user_token
 
 

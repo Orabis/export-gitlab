@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-21 16:19+0100\n"
+"POT-Creation-Date: 2024-01-11 12:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,66 +18,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: exportgitlab/apps/export/decorators.py:20
+#: exportgitlab/apps/export/decorators.py:24
+#, python-format
+msgid "Invalid gitlab token %(error_name)s"
+msgstr "Token gitlab invalide %(error_name)s"
+
 #: exportgitlab/apps/export/models.py:21
 msgid "Gitlab personal token"
 msgstr "Token personnel gitlab"
 
-#: exportgitlab/apps/export/views.py:26
+#: exportgitlab/apps/export/views.py:28
 msgid "Gitlab token modified"
 msgstr "Token Gitlab modifié"
 
-#: exportgitlab/apps/export/views.py:29
+#: exportgitlab/apps/export/views.py:31
 #, fuzzy
 #| msgid "Gitlab personal token"
 msgid "Wrong Gitlab token"
 msgstr "Mauvais token Gitlab"
 
-#: exportgitlab/apps/export/views.py:60
+#: exportgitlab/apps/export/views.py:62
 #, python-format
 msgid "Project : [%(project_name)s] added to database. id : %(project_id)s"
 msgstr "Projet : [%(project_name)s] ajouté dans la db. id : %(project_id)s"
 
-#: exportgitlab/apps/export/views.py:67
+#: exportgitlab/apps/export/views.py:69 exportgitlab/apps/export/views.py:100
 msgid "Project does not exist"
 msgstr "Le Projet n'existe pas"
 
-#: exportgitlab/apps/export/views.py:69
+#: exportgitlab/apps/export/views.py:71 exportgitlab/apps/export/views.py:102
 msgid "An error occurred while checking the project"
 msgstr "Une erreur s'est produite lors de la vérification du projet."
 
-#: exportgitlab/apps/export/views.py:71
+#: exportgitlab/apps/export/views.py:73
 #, fuzzy
 #| msgid "GitID invalid (Error in entering the ID) ?"
 msgid "GitID invalid (Error in entering the ID)"
 msgstr "GitID Invalide, (Erreur dans la rentrée de l'id) ?"
 
-#: exportgitlab/apps/export/views.py:92
-#, fuzzy, python-format
+#: exportgitlab/apps/export/views.py:95
+#, python-format
 #| msgid "Refresh of [%(project_name)s] complete. id : %(project_id)d"
 msgid "Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d"
 msgstr "Actualisation du projet [%(project_name)s] id : %(project_model_gitlab_id)d"
 
-#: exportgitlab/apps/export/views.py:146
+#: exportgitlab/apps/export/views.py:142
 msgid "Error downloading issues"
 msgstr "Erreur de téléchargement "
 
-#: exportgitlab/libs/reports_generation.py:22
-#: exportgitlab/libs/reports_generation.py:46
+#: exportgitlab/libs/reports_generation.py:23
+#: exportgitlab/libs/reports_generation.py:49
 #, fuzzy
 #| msgid "Error"
 msgid "ErrorPDF"
 msgstr "Erreur de PDF"
 
-#: exportgitlab/libs/reports_generation.py:34
-#: exportgitlab/libs/reports_generation.py:57
+#: exportgitlab/libs/reports_generation.py:35
+#: exportgitlab/libs/reports_generation.py:60
 msgid "No issues checked"
 msgstr "Aucune issues cochée"
 
 #: exportgitlab/libs/utils.py:44
-#, fuzzy
-#| msgid "Gitlab personal token"
-msgid "No Gitlab token found"
-msgstr "Aucun token Gitlab trouvé"
+#, python-format
+msgid "user %(username)s has no GitLab Token"
+msgstr "l'utilisateur %(username)s ne possède aucun token Gitlab"
 
 #: exportgitlab/templates/404.html:6
 msgid "Page not found"
@@ -141,42 +146,42 @@ msgstr "Filtrer"
 msgid "Reset"
 msgstr "Reset"
 
-#: exportgitlab/templates/export/issues_list.html:62
+#: exportgitlab/templates/export/issues_list.html:65
 msgid "Download in group"
 msgstr "Téléchargement groupé"
 
-#: exportgitlab/templates/export/issues_list.html:65
+#: exportgitlab/templates/export/issues_list.html:69
 msgid "Download separately"
 msgstr "Téléchargement séparé"
 
-#: exportgitlab/templates/export/issues_list.html:68
+#: exportgitlab/templates/export/issues_list.html:71
 msgid "Download"
 msgstr "Télécharger"
 
-#: exportgitlab/templates/export/issues_list.html:74
+#: exportgitlab/templates/export/issues_list.html:77
 msgid "Check all"
 msgstr "Tout cocher"
 
-#: exportgitlab/templates/export/issues_list.html:77
+#: exportgitlab/templates/export/issues_list.html:80
 msgid "Uncheck all"
 msgstr "Tout décocher"
 
-#: exportgitlab/templates/export/issues_list.html:108
+#: exportgitlab/templates/export/issues_list.html:115
 #: exportgitlab/templates/export/projects_list.html:54
 msgid "first"
 msgstr "premier"
 
-#: exportgitlab/templates/export/issues_list.html:109
+#: exportgitlab/templates/export/issues_list.html:116
 #: exportgitlab/templates/export/projects_list.html:55
 msgid "previous"
 msgstr "précédent"
 
-#: exportgitlab/templates/export/issues_list.html:119
+#: exportgitlab/templates/export/issues_list.html:126
 #: exportgitlab/templates/export/projects_list.html:65
 msgid "next"
 msgstr "suivant"
 
-#: exportgitlab/templates/export/issues_list.html:120
+#: exportgitlab/templates/export/issues_list.html:127
 #: exportgitlab/templates/export/projects_list.html:66
 msgid "last"
 msgstr "dernier"

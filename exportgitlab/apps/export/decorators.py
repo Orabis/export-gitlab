@@ -21,7 +21,9 @@ def gitlab_valid_auth_required(func):
                 )
                 return redirect("user_profile")
             except GitlabGetError as e:
-                messages.add_message(request, messages.ERROR, _("Invalid token %(error_name)s") % {"error_name": e})
+                messages.add_message(
+                    request, messages.ERROR, _("Invalid gitlab token %(error_name)s") % {"error_name": e}
+                )
                 return redirect("user_profile")
 
             request.gl = gl

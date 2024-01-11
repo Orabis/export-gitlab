@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 12:46+0100\n"
+"POT-Creation-Date: 2024-01-11 13:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: exportgitlab/apps/export/decorators.py:20
-#: exportgitlab/apps/export/decorators.py:24
+#: exportgitlab/apps/export/decorators.py:25
 #, python-format
 msgid "Invalid gitlab token %(error_name)s"
 msgstr "Token gitlab invalide %(error_name)s"
@@ -52,14 +52,11 @@ msgid "An error occurred while checking the project"
 msgstr "Une erreur s'est produite lors de la vérification du projet."
 
 #: exportgitlab/apps/export/views.py:73
-#, fuzzy
-#| msgid "GitID invalid (Error in entering the ID) ?"
-msgid "GitID invalid (Error in entering the ID)"
-msgstr "GitID Invalide, (Erreur dans la rentrée de l'id) ?"
+msgid "ID error (Project is already in the database ? Error in entering the ID ?)"
+msgstr "Erreur ID (Le Projet est dejà dans la base de donnée ? Faute de frappe ?) "
 
 #: exportgitlab/apps/export/views.py:95
 #, python-format
-#| msgid "Refresh of [%(project_name)s] complete. id : %(project_id)d"
 msgid "Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d"
 msgstr "Actualisation du projet [%(project_name)s] id : %(project_model_gitlab_id)d"
 
@@ -79,7 +76,7 @@ msgstr "Erreur de PDF"
 msgid "No issues checked"
 msgstr "Aucune issues cochée"
 
-#: exportgitlab/libs/utils.py:44
+#: exportgitlab/libs/utils.py:45
 #, python-format
 msgid "user %(username)s has no GitLab Token"
 msgstr "l'utilisateur %(username)s ne possède aucun token Gitlab"

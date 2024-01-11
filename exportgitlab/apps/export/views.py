@@ -70,7 +70,11 @@ def list_all_projects_homepage(request):
                 else:
                     messages.add_message(request, messages.ERROR, _("An error occurred while checking the project"))
         else:
-            messages.add_message(request, messages.ERROR, _("GitID invalid (Error in entering the ID)"))
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _("ID error (Project is already in the database ? Error in entering the ID ?)"),
+            )
     else:
         form = GitlabIDForm()
 

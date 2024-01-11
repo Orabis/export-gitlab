@@ -315,3 +315,5 @@ AUTHENTICATION_BACKENDS = ("django_cas.backends.CASBackend",)
 LOGIN_URL = '/cas/login'
 WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'
 SENTRY_DSN = "https://c838390b0adff873f1057b83d460f3b5@sentry.app.unistra.fr/58"
+DEFAULT_FROM_EMAIL = "ne-pas-repondre@unistra.fr"
+USERS_EMAILS = ["lmerkel@unistra.fr", "dbessey@unistra.fr"]

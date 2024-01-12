@@ -43,9 +43,8 @@
   margin-top:10px;
 }
 
-.table th {
-  background-color: #f2f2f2;
-
+.table thead th{
+    background-color: #f2f2f2;
 }
 
 .table tr:hover {
@@ -73,36 +72,44 @@
     justify-content: center;
 }
 
+.title {
+    border-bottom: 2px solid #ddd;
+    display: flex;
+    padding-bottom: 4px; /
+}
+
 .vertical-center {
     align-items: center;
 }
 
 .sr-only {
-border: 0 !important;
-clip-path: inset(50%) !important;
-height: 1px !important;
-margin: -1px !important;
-overflow: hidden !important;
-padding: 0 !important;
-position: absolute !important;
-width: 1px !important;
-white-space: nowrap !important; / 1 /
+    border: 0 !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important; / 1 /
 }
 
 .filter {
-        margin-left: auto;
-        margin-right: 0;
-        width: 50%;
-    }
+    margin-left: auto;
+    margin-right: 0;
+    width: 50%;
+}
 
-.labels_filter{
-    display:grid;
+.labels_filter {
+    display: grid;
     grid-template-columns: 1fr 1fr;
 
 }
+
 .check-all{
     padding-left:8px;
-    margin-top:25px
+    margin-top:25px;
+    margin-bottom: 0; !important;
 }
 .download-group{
     display:flex;
@@ -120,6 +127,7 @@ white-space: nowrap !important; / 1 /
 }
 
 aside.well .row {
+    margin-top: 10px;
     display: flex;
     justify-content: normal
 }

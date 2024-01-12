@@ -69,7 +69,8 @@ class ProjectsTest(TestCase):
         data = {"gyat": "test", "bdfgf": "hdfhdf74"}
         response = self.client.post(self.url, data)
         self.assertEqual(
-            str(response.wsgi_request._messages._loaded_messages[0]), "GitID invalid (Error in entering the ID)"
+            str(response.wsgi_request._messages._loaded_messages[0]),
+            "Erreur ID (Le Projet est dejà dans la base de donnée ? Faute de frappe ?) ",
         )
 
     def test_create_project_error_404(self):

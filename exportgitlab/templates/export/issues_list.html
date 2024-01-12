@@ -13,7 +13,10 @@
 <div class="container">
     <h4>Project ID: {{ project.gitlab_id }} - {{ project.name }} - Issues</h4>
     <aside class="well">
-        <form method="GET" action="{% url "list_all_issues" id_pj=project.id%}">
+        <div class="title">
+            <strong>{% trans "Filtering issues :" %}</strong>
+        </div>
+        <form method="GET" class="form-gitlab-token" action="{% url "list_all_issues" id_pj=project.id%}">
             <div class="row">
                 <div class="col-md-2">
                     <label for="iids">
@@ -82,6 +85,11 @@
             </label>
         </div>
         <table class="table">
+            <thead>
+                <tr>
+                    <th>{% trans "Issues selections :" %}</th>
+                </tr>
+            </thead>
             <tbody>
                 {% for issue in page_obj %}
                     <tr>

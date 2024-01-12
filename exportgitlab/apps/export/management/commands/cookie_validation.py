@@ -20,9 +20,9 @@ class Command(BaseCommand):
             headers={"Cookie": f"_gitlab_session={settings.GITLAB_SESSION_COOKIE}"},
         )
         if r.status_code != 200:
-            msg = "Le jeton de session de gitlab a expiré, il est impossible de récupérer les images des issues sans le cookie. Pour en définir un nouveau veuillez redéployer l'application avec ce paramètre : gitlab_session_cookie"
-            title = "Session Gitlab expiré"
+            msg = "Le jeton de session de GitLab a expiré, rendant impossible la récupération des images liées aux issues sans l'utilisation du cookie. Afin d'en définir un nouveau, veuillez redéployer l'application en incluant le paramètre suivant : `gitlab_session_cookie`."
+            title = "Session Gitlab expirée"
             mail = EmailMessage(f"[Export-Gitlab] {title}", msg, settings.DEFAULT_FROM_EMAIL, settings.USERS_EMAILS)
             mail.send()
             logger = logging.getLogger(__name__)
-            logger.error("Le cookie gitlab a expiré")
+            logger.error("Le cookie de la session Gitlab a expirée")

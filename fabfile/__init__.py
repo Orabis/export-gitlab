@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 """
@@ -124,7 +123,7 @@ def preprod():
     """Define preprod stage"""
     env.roledefs = {
         "web": ["django-pprd-w3.di.unistra.fr", "django-pprd-w4.di.unistra.fr"],
-        "lb": ["rp-dip.pprd-public.di.unistra.fr"],
+        "lb": ["rp-dip-pprd-public.di.unistra.fr"],
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs["web"]

@@ -62,17 +62,6 @@
 
     <form method='POST' id="issue_form" action="{% url "download_report_issues" id_pj=project.id%}">
         {% csrf_token %}
-        <div class="download-group">
-            <label for="group_issue">
-                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" checked required>
-                {% trans "Download in group" %}
-            </label>
-            <label for="ungroup_issue">
-                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue">
-                {% trans "Download separately" %}
-            </label>
-            <button class="btn btn" type="submit">{% trans "Download" %}</button>
-        </div>
         <div class="check-all">
             <input type="checkbox" id="selectAll"/>
             <label for="selectAll">
@@ -87,7 +76,20 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>{% trans "Issues selections :" %}</th>
+                    <th>
+                        <p>{% trans "Download issues selections :" %}</p>
+                            <div class="download-group">
+                            <button class="btn btn-default" type="submit">{% trans "Download" %}</button>
+                            <label for="group_issue">
+                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" checked required>
+                                {% trans "Download in group" %}
+                            </label>
+                            <label for="ungroup_issue">
+                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue">
+                                {% trans "Download separately" %}
+                            </label>
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>

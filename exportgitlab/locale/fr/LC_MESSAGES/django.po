@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 11:34+0100\n"
+"POT-Creation-Date: 2024-01-12 16:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,6 +123,7 @@ msgstr "issues"
 #: exportgitlab/templates/export/issues_list.html:17
 msgid "Filtering issues :"
 msgstr "Filtrages d'issues :"
+
 #: exportgitlab/templates/export/issues_list.html:27
 msgid "Status :"
 msgstr "Status :"
@@ -146,46 +147,46 @@ msgstr "Filtrer"
 msgid "Reset"
 msgstr "Reset"
 
-#: exportgitlab/templates/export/issues_list.html:68
-msgid "Download in group"
-msgstr "Téléchargement groupé"
-
-#: exportgitlab/templates/export/issues_list.html:72
-msgid "Download separately"
-msgstr "Téléchargement séparé"
-
-#: exportgitlab/templates/export/issues_list.html:74
-msgid "Download"
-msgstr "Télécharger"
-
-#: exportgitlab/templates/export/issues_list.html:80
+#: exportgitlab/templates/export/issues_list.html:69
 msgid "Check all"
 msgstr "Tout cocher"
 
-#: exportgitlab/templates/export/issues_list.html:83
+#: exportgitlab/templates/export/issues_list.html:72
 msgid "Uncheck all"
 msgstr "Tout décocher"
 
-#: exportgitlab/templates/export/issues_list.html:90
-msgid "Issues selections :"
-msgstr "Sélection des issues :"
+#: exportgitlab/templates/export/issues_list.html:80
+msgid "Download issues selections :"
+msgstr "Télécharger la sélection d'issues :"
 
-#: exportgitlab/templates/export/issues_list.html:123
+#: exportgitlab/templates/export/issues_list.html:82
+msgid "Download"
+msgstr "Télécharger"
+
+#: exportgitlab/templates/export/issues_list.html:85
+msgid "Download in group"
+msgstr "Téléchargement groupé"
+
+#: exportgitlab/templates/export/issues_list.html:89
+msgid "Download separately"
+msgstr "Téléchargement séparé"
+
+#: exportgitlab/templates/export/issues_list.html:125
 #: exportgitlab/templates/export/projects_list.html:54
 msgid "first"
 msgstr "premier"
 
-#: exportgitlab/templates/export/issues_list.html:124
+#: exportgitlab/templates/export/issues_list.html:126
 #: exportgitlab/templates/export/projects_list.html:55
 msgid "previous"
 msgstr "précédent"
 
-#: exportgitlab/templates/export/issues_list.html:134
+#: exportgitlab/templates/export/issues_list.html:136
 #: exportgitlab/templates/export/projects_list.html:65
 msgid "next"
 msgstr "suivant"
 
-#: exportgitlab/templates/export/issues_list.html:135
+#: exportgitlab/templates/export/issues_list.html:137
 #: exportgitlab/templates/export/projects_list.html:66
 msgid "last"
 msgstr "dernier"

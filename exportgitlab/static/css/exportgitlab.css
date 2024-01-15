@@ -35,7 +35,7 @@
   padding: 10px;
 }
 
-.custom-div {
+.form-git-error {
       margin-top: 50px;display:flex;
 }
 
@@ -60,16 +60,19 @@
     margin-bottom:auto;
 }
 
-.button_form {
-    margin-top: 15px;
-}
-.project-id-name-refresh a{
-    padding-right:5px;
+.button-form {
+    margin-top: 10px;
 }
 
 .flex{
     display:flex;
     justify-content: center;
+}
+
+.flex-column{
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .title {
@@ -80,6 +83,14 @@
 
 .vertical-center {
     align-items: center;
+}
+
+.legend-status{
+    margin-bottom: 3px;!important;
+    font-size: 14px;!important;
+    border:0;!important;
+    font-weight:bold;
+
 }
 
 .sr-only {
@@ -100,7 +111,7 @@
     width: 50%;
 }
 
-.labels_filter {
+.labels-filter {
     display: grid;
     grid-template-columns: 1fr 1fr;
 

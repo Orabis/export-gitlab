@@ -13,43 +13,38 @@
 <div class="container">
     <h4>Project ID: {{ project.gitlab_id }} - {{ project.name }} - Issues</h4>
     <aside class="well">
-        <div class="title">
-            <strong>{% trans "Filtering issues :" %}</strong>
-        </div>
+        <span><strong>{% trans "Filtering issues :" %}</strong></span>
         <form method="GET" class="form-gitlab-token" action="{% url "list_all_issues" id_pj=project.id%}">
             <div class="row">
                 <div class="col-md-2">
                     <label for="iids">
                         ID:
-                        <input class="form-control" name="iid" id="iids" value="" placeholder="1,2,3,4">
+                        <input class="form-control" name="iid" id="iids" placeholder="1,2,3,4">
                     </label>
-                    <div class="status-group">
-                        <label>{% trans "Status :" %}</label>
-                        <div class="open-close">
-                            <label for="opened">
-                                <input type="radio" name="oc" id="opened" value="opened" checked required>
-                                {% trans "Open" %}
-                            </label>
-                            <label for="closed">
-                                <input type="radio" name="oc" id="closed" value="closed">
-                                {% trans  "Close" %}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="button_form">
+                    <fieldset class="status-group">
+                        <legend class="legend-status">{% trans "Status :" %}</legend>
+                        <label for="opened">
+                            <input type="radio" name="oc" id="opened" value="opened" checked required>
+                            {% trans "Open" %}
+                        </label>
+                        <label for="closed">
+                            <input type="radio" name="oc" id="closed" value="closed">
+                            {% trans  "Close" %}
+                        </label>
+                    </fieldset>
+                    <div class="button-form">
                         <button class="btn btn-default" type="submit">{% trans "Filter"%}</button>
                         <input class="btn btn-default" type="reset" value="{% trans "Reset" %}">
                     </div>
                 </div>
-            
                 <div class="col-md-6">
-                    <div class="labels_filter">
+                    <div class="labels-filter">
                         {% for label in gitlab_labels %}
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="checkbox_{{ label }}" name="lab" value="{{ label }}">
+                            <div>
+                                <input type="checkbox" id="checkbox_{{ label }}" name="lab" value="{{ label }}">
                                 <label for="checkbox_{{ label }}">
                                     {% with color=gitlab_labels|get_value:label %}
-                                    <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label label-default">{{ label }}</span>
+                                    <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label">{{ label }}</span>
                                     {% endwith %}
                                 </label>    
                             </div>
@@ -77,8 +72,8 @@
             <thead>
                 <tr>
                     <th>
-                        <p>{% trans "Download issues selections :" %}</p>
-                            <div class="download-group">
+                        <p><strong>{% trans "Download issues selections :" %}</strong></p>
+                        <div class="download-group">
                             <button class="btn btn-default" type="submit">{% trans "Download" %}</button>
                             <label for="group_issue">
                                 <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" checked required>
@@ -101,7 +96,7 @@
                                 <span>{{ issue.iid }} - {{ issue.title }}</span>
                                 <span class="text-muted">{{ issue.author.name }}</span>
                             </label>
-                            <div style="margin-bottom: auto">
+                            <div>
                                 {% for tag in issue.labels %}
                                     {% with color=gitlab_labels|get_value:tag %}
                                         <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label">{{ tag }}</span>
@@ -117,28 +112,24 @@
 </div>
 
 {% if page_obj.next_page_number > 1 or page_obj.has_previous %}
-    <div class="container">
-        <div class="row">
-            <div class="text-center">
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                        <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
-                        <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
-                    {% endif %}
+<div class="container flex">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
+            {% endif %}
 
-                    <li class="disabled">
-                        <span>
-                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                        </span>
-                    </li>
+            <li class="disabled">
+                <span>
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+            </li>
 
-                    {% if page_obj.has_next %}
-                        <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
-                        <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
+                <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
+            {% endif %}
+        </ul>
+</div>
 {% endif %}
 {% endblock %}

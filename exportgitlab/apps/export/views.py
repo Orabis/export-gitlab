@@ -38,12 +38,12 @@ def user_change_token(request):
 @gitlab_valid_auth_required
 def list_all_projects_homepage(request):
     project_models = Project.objects.all()
-    paginator = Paginator(project_models, 13)
+    paginator = Paginator(project_models, 10)
 
     if request.GET.get("project_name_filter"):
         name_filter = request.GET.get("project_name_filter")
         all_projects = Project.objects.filter(name__contains=name_filter)
-        paginator = Paginator(all_projects, 13)
+        paginator = Paginator(all_projects, 10)
 
     if request.method == "POST":
         form = GitlabIDForm(request.POST)
@@ -119,7 +119,7 @@ def list_all_issues(request, id_pj):
     opened_closed_filter = request.GET.get("oc")
 
     list_issues = get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter)
-    paginator = Paginator(list_issues, 100)
+    paginator = Paginator(list_issues, 25)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(

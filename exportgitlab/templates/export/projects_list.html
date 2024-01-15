@@ -3,27 +3,24 @@
 {% block title %}{% trans "List of projects"%}{% endblock title %}
 {% block content %}{% translate "No description" as no_description_provided %}
 <div class="container">
-    <div class="project-forms">
-            <form action="{% url 'list_all_projects_homepage' %}" method="post" style="margin-bottom: 10px" class="form-inline">
-                <label>
-                    {% trans "Retrieve project :"%}
-                    {% csrf_token %}
-                </label>
-                <div class="form-group">
-                    {{ form.gitlab_id }}
-                </div>
-                <button type="submit" class="btn" name="retrieve_project" value="retrieve_project">
-                    {% translate "Confirm" %}
-                </button>
-            </form>
-
-            <form action="{% url 'list_all_projects_homepage' %}" method="get" class="form-inline">
-                <label>
-                    {% trans "Search by name :" %}
-                    <input type="text" name="project_name_filter" id="project_name_filter" value="">
-                    <button type="submit" class="btn">{% trans "Filter" %}</button>
-                </label>
-            </form>
+    <div>
+        <form action="{% url 'list_all_projects_homepage' %}" method="post" style="margin-bottom: 10px" class="form-inline">
+            <label>
+                {% trans "Retrieve project :"%}
+                {% csrf_token %}
+            </label>
+            <span class="form-group">{{ form.gitlab_id }}</span>
+            <button type="submit" class="btn" name="retrieve_project" value="retrieve_project">
+                {% translate "Confirm" %}
+            </button>
+        </form>
+        <form action="{% url 'list_all_projects_homepage' %}" method="get" class="form-inline">
+            <label>
+                {% trans "Search by name :" %}
+                <input type="text" name="project_name_filter" id="project_name_filter">
+                <button type="submit" class="btn">{% trans "Filter" %}</button>
+            </label>
+        </form>
     </div>
     <table class="table table-bordered">
         <tbody>
@@ -31,13 +28,12 @@
                 <tr>
                     <td>
                         <div class="project-id-name-refresh">
-                            <a class="glyphicon glyphicon-refresh" href="{% url "refresh_project" id_pj=project.id %}"></a>{{ project.gitlab_id }} - 
-                            <a class="" href="{% url "list_all_issues" id_pj=project.id %}">{{ project.name }}</a>
+                            <a class="glyphicon glyphicon-refresh" href="{% url "refresh_project" id_pj=project.id %}"></a>
+                            <span>{{ project.gitlab_id }} -</span> 
+                            <a href="{% url "list_all_issues" id_pj=project.id %}">{{ project.name }}</a>
                         </div>
-                        <div class="project-desc-url">
                             <span class="text-muted vertical-center">{{ project.description|default:no_description_provided }}</span>
                             <a href="{{ project.url }}" target="_blank">{{ project.url }}</a>
-                        </div>
                     </td>
                 </tr>
             {% endfor %}
@@ -47,27 +43,23 @@
 
 {% if page_obj.next_page_number > 1 or page_obj.has_previous %}
 <div class="container flex">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
-                    <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
-                {% endif %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
+            {% endif %}
 
-                <li class="disabled">
-                    <span>
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-                </li>
+            <li class="disabled">
+                <span>
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+            </li>
 
-                {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
-                    <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
-                {% endif %}
-            </ul>
-        </div>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
+                <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
+            {% endif %}
+        </ul>
     </div>
-</div>
 {% endif %}
 {% endblock %}

@@ -5,21 +5,19 @@
 {% block content %}{% translate "No token defined" as no_token_defined %}
 
 <div class="container">
-    <div class="well">
+    <aside class="well">
         <h3>{% trans "User Information" %}</h3>
         <dl class="dl-horizontal">
             <dt>{% trans "Username :"%}</dt>
             <dd>{{ user.username }}</dd>
-            
             <dt>{% trans "GitLab Token :"%}</dt>
             {% if user.gitlab_token is none %}
-            <dd>{% trans "No token defined" %}<dd>
+                <dd>{% trans "No token defined" %}<dd>
             {% else %}
-            <dd>**********</dd>
+                <dd>**********</dd>
             {% endif %}
             <dd><a href="{% url "user_change_token" %}">{% trans "Change the token "%}</a></dd>
         </dl>
-    </div>
+    </aside>
 </div>
-    
 {% endblock %}

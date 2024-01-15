@@ -21,7 +21,9 @@ def get_labels_list(gitlab_project):
     return gitlab_labels_dict
 
 
-def get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter="opened"):
+def get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter):
+    if not opened_closed_filter:
+        opened_closed_filter = "opened"
     params = {
         "get_all": True,
         "state": opened_closed_filter,

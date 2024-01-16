@@ -5,9 +5,10 @@
 <div class="container">
     <div>
         <form action="{% url 'list_all_projects_homepage' %}" method="post" style="margin-bottom: 10px" class="form-inline">
-            <label>
+            {% csrf_token %}
+
+            <label for="id_gitlab_id">
                 {% trans "Retrieve project :"%}
-                {% csrf_token %}
             </label>
             <span class="form-group">{{ form.gitlab_id }}</span>
             <button type="submit" class="btn" name="retrieve_project" value="retrieve_project">
@@ -15,11 +16,11 @@
             </button>
         </form>
         <form action="{% url 'list_all_projects_homepage' %}" method="get" class="form-inline">
-            <label>
-                {% trans "Search by name :" %}
-                <input type="text" name="project_name_filter" id="project_name_filter">
-                <button type="submit" class="btn">{% trans "Filter" %}</button>
-            </label>
+            <label for="project_name_filter">{% trans "Search by name :" %}</label>
+            
+            <input type="text" name="project_name_filter" id="project_name_filter">
+
+            <button type="submit" class="btn">{% trans "Filter" %}</button>
         </form>
     </div>
     <table class="table table-bordered">

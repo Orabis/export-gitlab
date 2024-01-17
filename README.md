@@ -6,7 +6,7 @@ L'application Export-GitLab simplifie l'exportation des issues d'un projet, perm
 
 ### Première utilisation
 
-__Site : [Export-GitLab](http://export-gitlab-test.app.unistra.fr/)__
+__Site : [Export-GitLab](https://export-gitlab.app.unistra.fr)__
 
 Pour utiliser l'application, vous devez renseigner le token utilisateur de GitLab. Voici les étapes :
 

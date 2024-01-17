@@ -1,6 +1,8 @@
 import os
+
 from setuptools import find_packages, setup
 
+VERSION = "1.0.0"
 
 with open("README.md") as readme:
     long_description = readme.read()
@@ -29,7 +31,7 @@ recursive_requirements("requirements.txt", libraries, dependency_links)
 
 setup(
     name="exportgitlab",
-    version="0.1.0",
+    version=VERSION,
     packages=find_packages(),
     install_requires=libraries,
     dependency_links=dependency_links,

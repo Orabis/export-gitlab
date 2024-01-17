@@ -36,8 +36,8 @@
         {% for issue in issues_data %}
             <div class="issue-container">
                 <div class="issue-title">
-                    <h2>{{ issue.title|safe }}</h2>
-                    <h6>Issue ID: {{ issue.id }}</h6>
+                    <h2>{{ issue.name }} - ID {{ issue.id }}</h2>
+                    <h3>{{ issue.title|safe }}</h3>
                 </div>
                 <div class="issue-description">
                     {{ issue.description|safe }}

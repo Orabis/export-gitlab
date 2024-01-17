@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Profile" %}{% endblock title %}
+
+{% block head-javascript %}
+    <script type="module">
+        const gitlabToken = document.getElementById('aside_gitlab_token');
+        if (gitlabToken) {
+            const gitlabTokenLength = gitlabToken.innerText.length;
+
+            gitlabToken.innerText = ''
+            for (let i = 0; i < gitlabTokenLength; i++) {
+                gitlabToken.innerText += '*';
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}{% translate "No token defined" as no_token_defined %}
+
+    <div class="container">
+        <aside class="well">
+            <h3>{% trans "User Information" %}</h3>
+            <dl class="dl-horizontal">
+                <dt>{% trans "Username :" %}</dt>
+                <dd>{{ user.username }}</dd>
+                <dt>{% trans "GitLab Token :" %}</dt>
+                {% if user.gitlab_token is none %}
+                    <dd>{% trans "No token defined" %}
+                    <dd>
+                        {% else %}
+                    <dd id="aside_gitlab_token">
+                        {{ user.gitlab_token }}
+                    </dd>
+                {% endif %}
+                <dd><a href="{% url "user_change_token" %}">{% trans "Change the token " %}</a></dd>
+            </dl>
+        </aside>
+    </div>
+{% endblock %}

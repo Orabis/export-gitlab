@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 ######################
 # Path configuration #
 ######################
@@ -9,14 +8,12 @@ DJANGO_ROOT = Path(__file__).resolve(strict=True).parent.parent
 SITE_ROOT = DJANGO_ROOT.parent
 SITE_NAME = DJANGO_ROOT.name
 
-
 #######################
 # Debug configuration #
 #######################
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-
 
 ##########################
 # Manager configurations #
@@ -27,7 +24,6 @@ ADMINS = [
 ]
 
 MANAGERS = ADMINS
-
 
 ##########################
 # Database configuration #
@@ -53,7 +49,6 @@ DATABASES = {
     }
 }
 
-
 ######################
 # Site configuration #
 ######################
@@ -61,7 +56,6 @@ DATABASES = {
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
-
 
 #########################
 # General configuration #
@@ -85,14 +79,12 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 #######################
 # locale configuration #
@@ -101,7 +93,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOCALE_PATHS = [
     DJANGO_ROOT / 'locale'
 ]
-
 
 #######################
 # Media configuration #
@@ -115,7 +106,6 @@ MEDIA_ROOT = DJANGO_ROOT / 'media'
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/media/'
-
 
 ##############################
 # Static files configuration #
@@ -143,13 +133,11 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-
 ############
 # Dipstrap #
 ############
 
 DIPSTRAP_STATIC_URL = '//django-static.u-strasbg.fr/dipstrap/'
-
 
 ##############
 # Secret key #
@@ -159,7 +147,6 @@ DIPSTRAP_STATIC_URL = '//django-static.u-strasbg.fr/dipstrap/'
 # Only for dev and test environnement. Should be redefined for production
 # environnement
 SECRET_KEY = 'ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!'
-
 
 ##########################
 # Template configuration #
@@ -185,7 +172,6 @@ TEMPLATES = [
     },
 ]
 
-
 ############################
 # Middleware configuration #
 ############################
@@ -193,13 +179,14 @@ TEMPLATES = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_cas.middleware.CASMiddleware',
 ]
-
 
 #####################
 # Url configuration #
@@ -207,14 +194,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = '%s.urls' % SITE_NAME
 
-
 ######################
 # WSGI configuration #
 ######################
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
-
 
 #############################
 # Application configuration #
@@ -234,6 +219,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'django_extensions',
+    'django_cas',
 ]
 
 LOCAL_APPS = [
@@ -243,13 +229,11 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-
 #########################
 # Session configuration #
 #########################
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-
 
 #####################
 # Log configuration #
@@ -317,3 +301,19 @@ LOGGING = {
         }
     }
 }
+
+
+def username_format(username):
+    return username.lower()
+
+
+AUTH_USER_MODEL = 'export.User'
+CAS_SERVER_URL = 'https://cas.unistra.fr/cas/'
+# CAS_LOGOUT_COMPLETELY = True
+CAS_USERNAME_FORMAT = username_format
+AUTHENTICATION_BACKENDS = ("django_cas.backends.CASBackend",)
+LOGIN_URL = '/cas/login'
+WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'
+SENTRY_DSN = "https://c838390b0adff873f1057b83d460f3b5@sentry.app.unistra.fr/58"
+DEFAULT_FROM_EMAIL = "ne-pas-repondre@unistra.fr"
+USERS_EMAILS = ["lmerkel@unistra.fr", "dbessey@unistra.fr"]

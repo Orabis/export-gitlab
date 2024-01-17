@@ -6,3 +6,7 @@ pycodestyle
 django-debug-toolbar
 django-extensions
 tox
+black
+isort
+pre-commit
+responses

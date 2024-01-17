@@ -5,7 +5,7 @@
 
 from os.path import join
 
-import pydiploy
+import pydiploy, sentry
 from fabric.api import env, execute, roles, task
 
 # edit config here !
@@ -23,7 +23,7 @@ env.remote_virtualenv_dir = join(
     env.remote_virtualenv_root, env.application_name
 )  # venv for webapp dir
 # git repository url
-env.remote_repo_url = "git@git.net:exportgitlab.git"
+env.remote_repo_url = "git@git.unistra.fr:di/export-gitlab.git"
 env.local_tmp_dir = "/tmp"  # tmp dir
 env.remote_static_root = "/var/www/static/"  # root of static files
 env.locale = "fr_FR.UTF-8"  # locale to use on remote
@@ -31,14 +31,14 @@ env.timezone = "Europe/Paris"  # timezone for remote
 env.keep_releases = 2  # number of old releases to keep before cleaning
 env.extra_goals = ["preprod"]  # add extra goal(s) to defaults (test,dev,prod)
 env.dipstrap_version = "latest"
-env.verbose_output = False  # True for verbose output
+env.verbose_output = True  # True for verbose output
+env.sentry_application_name = "export-gitlab"
 
 # optional parameters
-
 # env.dest_path = '' # if not set using env_local_tmp_dir
 # env.excluded_files = ['pron.jpg'] # file(s) that rsync should exclude when deploying app
 # env.extra_ppa_to_install = ['ppa:vincent-c/ponysay'] # extra ppa source(s) to use
-# env.extra_pkg_to_install = ['ponysay'] # extra debian/ubuntu package(s) to install on remote
+env.extra_pkg_to_install = ['python3.11-distutils']  # extra debian/ubuntu package(s) to install on remote
 # env.cfg_shared_files = ['config','/app/path/to/config/config_file'] # config files to be placed in shared config dir
 # env.extra_symlink_dirs = ['mydir','/app/mydir'] # dirs to be symlinked in shared directory
 # env.verbose = True # verbose display for pydiploy default value = True
@@ -90,23 +90,31 @@ def dev():
 def test():
     """Define test stage"""
     env.roledefs = {
-        "web": ["exportgitlab-test.net"],
-        "lb": ["lb.exportgitlab-test.net"],
+        "web": ["django-test2.di.unistra.fr"],
+        "lb": ["django-test2.di.unistra.fr"],
     }
     # env.user = 'root'  # user for ssh
     env.backends = ["127.0.0.1"]
-    env.server_name = "exportgitlab-test.net"
-    env.short_server_name = "exportgitlab-test"
+    env.server_name = "export-gitlab-test.app.unistra.fr"
+    env.short_server_name = "export-gitlab-test"
     env.static_folder = "/site_media/"
     env.server_ip = ""
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = "/etc/ssl/certs/exportgitlab.net.pem"
-    env.path_to_cert_key = "/etc/ssl/private/exportgitlab.net.key"
+    env.path_to_cert = "/etc/ssl/certs/mega_wildcard.pem"
+    env.path_to_cert_key = "/etc/ssl/private/mega_wildcard.key"
     env.goal = "test"
-    env.socket_port = ""
+    env.socket_port = "8037"
     env.socket_host = "127.0.0.1"
-    env.map_settings = {}
+    env.map_settings = {
+        "default_db_host": "DATABASES['default']['HOST']",
+        "default_db_user": "DATABASES['default']['USER']",
+        "default_db_password": "DATABASES['default']['PASSWORD']",
+        "default_db_name": "DATABASES['default']['NAME']",
+        "secret_key": "SECRET_KEY",
+        "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
+    }
+    env.release_name = sentry.get_release_name()
     execute(build_env)
 
 
@@ -114,28 +122,30 @@ def test():
 def preprod():
     """Define preprod stage"""
     env.roledefs = {
-        "web": ["exportgitlab-pprd.net"],
-        "lb": ["lb.exportgitlab-pprd.net"],
+        "web": ["django-pprd-w3.di.unistra.fr", "django-pprd-w4.di.unistra.fr"],
+        "lb": ["rp-dip-pprd-public.di.unistra.fr"],
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs["web"]
-    env.server_name = "exportgitlab-pprd.net"
-    env.short_server_name = "exportgitlab-pprd"
+    env.server_name = "export-gitlab-pprd.app.unistra.fr"
+    env.short_server_name = "export-gitlab-pprd"
     env.static_folder = "/site_media/"
-    env.server_ip = ""
+    env.server_ip = "130.79.245.212"
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = "/etc/ssl/certs/exportgitlab.net.pem"
-    env.path_to_cert_key = "/etc/ssl/private/exportgitlab.net.key"
+    env.path_to_cert = "/etc/ssl/certs/mega_wildcard.pem"
+    env.path_to_cert_key = "/etc/ssl/private/mega_wildcard.key"
     env.goal = "preprod"
-    env.socket_port = ""
+    env.socket_port = "8026"
     env.map_settings = {
         "default_db_host": "DATABASES['default']['HOST']",
         "default_db_user": "DATABASES['default']['USER']",
         "default_db_password": "DATABASES['default']['PASSWORD']",
         "default_db_name": "DATABASES['default']['NAME']",
         "secret_key": "SECRET_KEY",
+        "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
+    env.release_name = sentry.get_release_name()
     execute(build_env)
 
 
@@ -143,28 +153,30 @@ def preprod():
 def prod():
     """Define prod stage"""
     env.roledefs = {
-        "web": ["exportgitlab.net"],
-        "lb": ["lb.exportgitlab.net"],
+        "web": ["django-w7.di.unistra.fr", "django-w8.di.unistra.fr"],
+        "lb": ["rp-dip-public-m.di.unistra.fr", "rp-dip-public-s.di.unistra.fr"],
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs["web"]
-    env.server_name = "exportgitlab.net"
-    env.short_server_name = "exportgitlab"
+    env.server_name = "export-gitlab.app.unistra.fr"
+    env.short_server_name = "export-gitlab"
     env.static_folder = "/site_media/"
-    env.server_ip = ""
+    env.server_ip = "130.79.245.214"
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = "/etc/ssl/certs/exportgitlab.net.pem"
-    env.path_to_cert_key = "/etc/ssl/private/exportgitlab.net.key"
+    env.path_to_cert = "/etc/ssl/certs/mega_wildcard.pem"
+    env.path_to_cert_key = "/etc/ssl/private/mega_wildcard.key"
     env.goal = "prod"
-    env.socket_port = ""
+    env.socket_port = "8016"
     env.map_settings = {
         "default_db_host": "DATABASES['default']['HOST']",
         "default_db_user": "DATABASES['default']['USER']",
         "default_db_password": "DATABASES['default']['PASSWORD']",
         "default_db_name": "DATABASES['default']['NAME']",
         "secret_key": "SECRET_KEY",
+        "gitlab_session_cookie": "GITLAB_SESSION_COOKIE",
     }
+    env.release_name = sentry.get_release_name()
     execute(build_env)
 
 
@@ -207,6 +219,7 @@ def pre_install_frontend():
 def deploy(update_pkg=False):
     """Deploy code on server"""
     execute(deploy_backend, update_pkg)
+    execute(declare_release_to_sentry)
     execute(deploy_frontend)
 
 
@@ -251,6 +264,10 @@ def post_install_frontend():
     """Post installation of frontend"""
     execute(pydiploy.django.post_install_frontend)
 
+@task
+def declare_release_to_sentry():
+    if env.release_name:
+        execute(sentry.declare_release, release_name=env.release_name)
 
 @roles("web")
 @task

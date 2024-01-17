@@ -1,0 +1,130 @@
+[
+  {
+    "id": 35136,
+    "iid": 175,
+    "project_id": 34755,
+    "title": "Consulter la nomenclature ETAPE [T1]",
+    "description": "# User story\nEn tant qu'utilisateur Cortex, je peux accéder à la nomenclature ETAPE pour visualiser les valeurs disponibles\n\n## Nomenclature **ETAPE**\n\n* **Standard** (6 attributs : code, is_active, label, short_label, validity_begin_date, validity_end_date)\n* **En lecture seule**\n* **Sans transcodification**\n\n_Nb : Template 1_\n\n## Positionnement de l'accès dans l'arborescence\n\n* Personnes > Apprenants > **ETAPE**\n\n## Détail de l'écran de consultation\n\n* Le fonctionnement est identique à #32 \n\n_Nb : la maquette ci-dessous ne présente que quelques exemples de valeurs attendues_\n\n![maquette_consult_ETAPE](/uploads/0674c1eafb9d0fa4fc590f031bf68414/maquette_consult_ETAPE.png)\n\nLa recherche avancée fonctionne comme pour les autres nomenclature du T1\n\n## Critères d'acceptation (allégés car recours au Template 1)\n\n* On accède à l'écran de consultation depuis l'arborescence des nomenclatures\n* Le nom de nomenclature est correct dans le titre\n\n* **Les données des colonnes sont conformes au contenu de la base de données**\n\n* Le tri fonctionne sur toutes les colonnes\n* La recherche avancée génère un résultat correct sur tous les critères, et en combinaison ...\n\n## Tâches\n* [ ] ...\n* [ ] ...\n\n## Chiffres\n| Préjudice | Bénéfice | Story Points | Durée j/h |\n| :-: | :-: | :-: | :-: |\n| | | | |",
+    "state": "opened",
+    "created_at": "2023-12-27T13:40:36.027Z",
+    "updated_at": "2024-01-09T12:12:58.832Z",
+    "closed_at": null,
+    "closed_by": null,
+    "labels": [
+      "Nomenclatures",
+      "OK Métiers"
+    ],
+    "milestone": null,
+    "assignees": [],
+    "author": {
+      "id": 673,
+      "username": "bonsoir",
+      "name": "john do",
+      "state": "active",
+      "locked": false,
+      "avatar_url": null,
+      "web_url": "https://git.oui/jamais"
+    },
+    "type": "ISSUE",
+    "assignee": null,
+    "user_notes_count": 0,
+    "merge_requests_count": 0,
+    "upvotes": 0,
+    "downvotes": 0,
+    "due_date": null,
+    "confidential": false,
+    "discussion_locked": null,
+    "issue_type": "issue",
+    "web_url": "https://git.oui/jamais",
+    "time_stats": {
+      "time_estimate": 0,
+      "total_time_spent": 0,
+      "human_time_estimate": null,
+      "human_total_time_spent": null
+    },
+    "task_completion_status": {
+      "count": 2,
+      "completed_count": 0
+    },
+    "has_tasks": false,
+    "_links": {
+      "self": "https://git.oui/jamais",
+      "notes": "https://git.oui/jamais",
+      "award_emoji": "https://git.oui/jamais",
+      "project": "https://git.oui/jamais",
+      "closed_as_duplicate_of": null
+    },
+    "references": {
+      "short": "#175",
+      "relative": "#175",
+      "full": "gngng/gngn/ngnn#175"
+    },
+    "severity": "UNKNOWN",
+    "moved_to_id": null,
+    "service_desk_reply_to": null
+  },
+  {
+    "id": 35135,
+    "iid": 174,
+    "project_id": 34755,
+    "title": "Consulter la nomenclature DIPLOME",
+    "description": "# User story\nEn tant qu'utilisateur Cortex, je peux accéder à la nomenclature DIPLOME pour visualiser les valeurs disponibles\n\n## Nomenclature DIPLOME\n\n* **Etendue** : code, **diploma_type**, is_active, label, short_label, validity_begin_date, validity_end_date\n* **En lecture seule**\n* **Sans transcodification**\n\n## Positionnement de l'accès dans l'arborescence\n\n* Personnes > Apprenants > **DIPLÔME**\n\n## Détail de l'écran de consultation\n\n* icone eye-fill dans le titre _(nomenclature en lecture seule)_                                                                         \n* L'affichage du tableau, ainsi que les fonctionnalités de tri sont identiques à #32.\n\n* Attribut/Colonne supplémentaire : diploma_type : la **colonne supplémentaire Type diplôme** contient la concaténation de la foreign key diploma_type, et du libellé court correspondant de la classe DiplomaType _(cf. maquette)_\n\n* Pas de fonctionnalité CREER, GERER, ni TRANSCODIFICATION\n\n_Nb : la maquette ci-dessous ne présente que quelques exemples de valeurs attendues_\n\n![maquette_consult_DIPLOME](/uploads/831561de38c52fa6a85cfe82a2383d8f/maquette_consult_DIPLOME.png)\n\n## Recours à la recherche avancée\n\n* la recherche avancée fonctionne comme en #32, avec un **critère supplémentaire Type Diplôme**\n\n## Critères d'acceptation \n\n* On accède à l'écran de consultation depuis l'arborescence des nomenclatures\n* Le nom de nomenclature est correct dans le titre\n\n* **Les données des colonnes sont conformes au contenu de la base de données**\n* **La colonne Type Diplôme est correctement renseignée**\n\n* Le tri fonctionne sur toutes les colonnes\n* La recherche avancée génère un résultat correct sur tous les critères, et en combinaison ...\n\n## Tâches\n* [ ] ...\n* [ ] ...\n\n## Chiffres\n| Préjudice | Bénéfice | Story Points | Durée j/h |\n| :-: | :-: | :-: | :-: |\n| | | | |",
+    "state": "opened",
+    "created_at": "2023-12-27T13:38:17.870Z",
+    "updated_at": "2024-01-09T12:12:58.625Z",
+    "closed_at": null,
+    "closed_by": null,
+    "labels": [
+      "Nomenclatures",
+      "OK Métiers"
+    ],
+    "milestone": null,
+    "assignees": [],
+    "author": {
+      "id": 673,
+      "username": "hello",
+      "name": "JAMAIS",
+      "state": "active",
+      "locked": false,
+      "avatar_url": null,
+      "web_url": "https://git.oui/jamais"
+    },
+    "type": "ISSUE",
+    "assignee": null,
+    "user_notes_count": 0,
+    "merge_requests_count": 0,
+    "upvotes": 0,
+    "downvotes": 0,
+    "due_date": null,
+    "confidential": false,
+    "discussion_locked": null,
+    "issue_type": "issue",
+    "web_url": "https://git.oui/jamais",
+    "time_stats": {
+      "time_estimate": 0,
+      "total_time_spent": 0,
+      "human_time_estimate": null,
+      "human_total_time_spent": null
+    },
+    "task_completion_status": {
+      "count": 2,
+      "completed_count": 0
+    },
+    "has_tasks": false,
+    "_links": {
+      "self": "https://git.oui/jamais",
+      "notes": "https://git.oui/jamais",
+      "award_emoji": "https://git.oui/jamais",
+      "project": "https://git.oui/jamais",
+      "closed_as_duplicate_of": null
+    },
+    "references": {
+      "short": "#174",
+      "relative": "#174",
+      "full": "qsds/qsdsqd/qsdqsd#174"
+    },
+    "severity": "UNKNOWN",
+    "moved_to_id": null,
+    "service_desk_reply_to": null
+  }
+]

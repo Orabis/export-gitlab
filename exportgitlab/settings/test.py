@@ -1,5 +1,7 @@
-from .base import *
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
+from .base import *
 
 #######################
 # Debug configuration #
@@ -26,7 +28,7 @@ ALLOWED_HOSTS = [
     '.u-strasbg.fr',
     '.unistra.fr',
 ]
-
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 
 #####################
 # Log configuration #
@@ -44,3 +46,13 @@ for logger in LOGGING['loggers']:
 
 DIPSTRAP_VERSION = '{{ dipstrap_version }}'
 DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
+GITLAB_SESSION_COOKIE = '{{ gitlab_session_cookie }}'
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    environment="test",
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)
+SECRET_KEY = '{{ secret_key }}'

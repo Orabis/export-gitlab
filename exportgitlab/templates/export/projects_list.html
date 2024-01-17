@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "List of projects"%}{% endblock title %}
+{% block content %}{% translate "No description" as no_description_provided %}
+<div class="container">
+    <div>
+        <form action="{% url 'list_all_projects_homepage' %}" method="post" style="margin-bottom: 10px" class="form-inline">
+            {% csrf_token %}
+
+            <label for="id_gitlab_id">
+                {% trans "Retrieve project :"%}
+            </label>
+            <span class="form-group">{{ form.gitlab_id }}</span>
+            <button type="submit" class="btn" name="retrieve_project" value="retrieve_project">
+                {% translate "Confirm" %}
+            </button>
+        </form>
+        <form action="{% url 'list_all_projects_homepage' %}" method="get" class="form-inline">
+            <label for="project_name_filter">{% trans "Search by name :" %}</label>
+            
+            <input type="text" name="project_name_filter" id="project_name_filter">
+
+            <button type="submit" class="btn">{% trans "Filter" %}</button>
+        </form>
+    </div>
+    <table class="table table-bordered">
+        <tbody>
+            {% for project in page_obj %}
+                <tr>
+                    <td>
+                        <div class="project-id-name-refresh">
+                            <a class="glyphicon glyphicon-refresh" href="{% url "refresh_project" id_pj=project.id %}"></a>
+                            <span>{{ project.gitlab_id }} -</span> 
+                            <a href="{% url "list_all_issues" id_pj=project.id %}">{{ project.name }}</a>
+                        </div>
+                            <span class="text-muted vertical-center">{{ project.description|default:no_description_provided }}</span>
+                            <a href="{{ project.url }}" target="_blank">{{ project.url }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if page_obj.next_page_number > 1 or page_obj.has_previous %}
+<div class="container flex">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
+            {% endif %}
+
+            <li class="disabled">
+                <span>
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
+                <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}

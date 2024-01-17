@@ -74,13 +74,13 @@
                     <td>
                         <p><strong>{% trans "Download issues selections :" %}</strong></p>
                         <div class="download-group">
-                            <button class="btn btn-default" type="submit">{% trans "Download" %}</button>
+                            <button class="btn btn-default" type="submit" id="issue_dl_button" disabled>{% trans "Download" %}</button>
                             <label for="group_issue">
-                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" checked required>
+                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" disabled checked>
                                 {% trans "Download in group" %}
                             </label>
                             <label for="ungroup_issue">
-                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue">
+                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue" disabled>
                                 {% trans "Download separately" %}
                             </label>
                         </div>

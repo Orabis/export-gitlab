@@ -120,7 +120,7 @@
 
 .labels-filter {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
 
 }
 
@@ -148,7 +148,6 @@
 
 aside.well .row {
     margin-top: 10px;
-    display: flex;
     justify-content: normal
 }
 

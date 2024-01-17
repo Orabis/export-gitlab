@@ -37,19 +37,17 @@
                         <button class="btn btn-default" type="reset">{% trans "Reset" %}</button>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="labels-filter">
-                        {% for label in gitlab_labels %}
-                            <div>
-                                {% with attrs=gitlab_labels|get_value:label %}
-                                <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
-                                <label for="checkbox_{{ attrs.id }}">
-                                    <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}" class="label">{{ label }}</span>
-                                    {% endwith %}
-                                </label>    
-                            </div>
-                        {% endfor %}
-                    </div>
+                <div class="labels-filter">
+                    {% for label in gitlab_labels %}
+                        <div>
+                            {% with attrs=gitlab_labels|get_value:label %}
+                            <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
+                            <label for="checkbox_{{ attrs.id }}">
+                                <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}" class="label">{{ label }}</span>
+                                {% endwith %}
+                            </label>    
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </form>

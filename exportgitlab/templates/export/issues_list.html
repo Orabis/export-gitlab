@@ -41,10 +41,10 @@
                     <div class="labels-filter">
                         {% for label in gitlab_labels %}
                             <div>
-                                <input type="checkbox" id="checkbox_{{ label }}" name="lab" value="{{ label }}">
-                                <label for="checkbox_{{ label }}">
-                                    {% with color=gitlab_labels|get_value:label %}
-                                    <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label">{{ label }}</span>
+                                {% with attrs=gitlab_labels|get_value:label %}
+                                <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
+                                <label for="checkbox_{{ attrs.id }}">
+                                    <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}" class="label">{{ label }}</span>
                                     {% endwith %}
                                 </label>    
                             </div>

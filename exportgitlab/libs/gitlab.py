@@ -15,9 +15,9 @@ def get_labels_list(gitlab_project):
     for label in gitlab_labels:
         accessibility_color_check = passes(label.color, "#ffffff")
         if accessibility_color_check:
-            gitlab_labels_dict[label.name] = {"bg_color": label.color, "text_color": "#FFFFF"}
+            gitlab_labels_dict[label.name] = {"bg_color": label.color, "text_color": "#FFFFF", "id": label.id}
         else:
-            gitlab_labels_dict[label.name] = {"bg_color": label.color, "text_color": "#000000"}
+            gitlab_labels_dict[label.name] = {"bg_color": label.color, "text_color": "#000000", "id": label.id}
     return gitlab_labels_dict
 
 

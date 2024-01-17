@@ -37,19 +37,17 @@
                         <button class="btn btn-default" type="reset">{% trans "Reset" %}</button>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="labels-filter">
-                        {% for label in gitlab_labels %}
-                            <div>
-                                {% with attrs=gitlab_labels|get_value:label %}
-                                <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
-                                <label for="checkbox_{{ attrs.id }}">
-                                    <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}" class="label">{{ label }}</span>
-                                    {% endwith %}
-                                </label>    
-                            </div>
-                        {% endfor %}
-                    </div>
+                <div class="labels-filter">
+                    {% for label in gitlab_labels %}
+                        <div>
+                            {% with attrs=gitlab_labels|get_value:label %}
+                            <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
+                            <label for="checkbox_{{ attrs.id }}">
+                                <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}" class="label">{{ label }}</span>
+                                {% endwith %}
+                            </label>    
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </form>
@@ -74,13 +72,13 @@
                     <td>
                         <p><strong>{% trans "Download issues selections :" %}</strong></p>
                         <div class="download-group">
-                            <button class="btn btn-default" type="submit">{% trans "Download" %}</button>
+                            <button class="btn btn-default" type="submit" id="issue_dl_button" disabled>{% trans "Download" %}</button>
                             <label for="group_issue">
-                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" checked required>
+                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" disabled checked>
                                 {% trans "Download in group" %}
                             </label>
                             <label for="ungroup_issue">
-                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue">
+                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue" disabled>
                                 {% trans "Download separately" %}
                             </label>
                         </div>

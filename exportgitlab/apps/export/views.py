@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -118,7 +119,7 @@ def list_all_issues(request, id_pj):
     labels_filter = request.GET.getlist("lab")
     opened_closed_filter = request.GET.get("oc")
 
-    list_issues = get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter)
+    list_issues = get_issues(gitlab_project)
     paginator = Paginator(list_issues, 25)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -145,6 +146,30 @@ def download_report_issues(request, id_pj):
         pass
     messages.add_message(request, messages.ERROR, _("Error downloading issues"))
     return redirect(reverse("list_all_issues", kwargs={"id_pj": id_pj}))
+
+
+@gitlab_valid_auth_required
+def project_info(request, id_pj):
+    project_model: Project = get_object_or_404(Project, id=id_pj)
+    gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
+    project_data = {"id": gitlab_project.id, "name": gitlab_project.name}
+    return JsonResponse(project_data)
+
+
+@gitlab_valid_auth_required
+def labels_info(request, id_pj):
+    project_model: Project = get_object_or_404(Project, id=id_pj)
+    gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
+    gitlab_labels = get_labels_list(gitlab_project)
+    return JsonResponse(gitlab_labels, safe=False)
+
+
+@gitlab_valid_auth_required
+def issues_info(request, id_pj):
+    project_model: Project = get_object_or_404(Project, id=id_pj)
+    gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
+    issues_data = get_issues(gitlab_project)
+    return JsonResponse(issues_data, safe=False)
 
 
 def index(request):

@@ -11,25 +11,31 @@ def gl_connection(user_token):
 
 def get_labels_list(gitlab_project):
     gitlab_labels = gitlab_project.labels.list(get_all=True)
-    gitlab_labels_dict = {}
+    gitlab_labels_dict = []
     for label in gitlab_labels:
         accessibility_color_check = passes(label.color, "#ffffff")
         if accessibility_color_check:
-            gitlab_labels_dict[label.name] = {"bg_color": label.color, "text_color": "#FFFFF", "id": label.id}
+            gitlab_labels_dict.append(
+                {"name": label.name, "bg_color": label.color, "text_color": "#FFFFF", "id": label.id}
+            )
         else:
-            gitlab_labels_dict[label.name] = {"bg_color": label.color, "text_color": "#000000", "id": label.id}
+            gitlab_labels_dict.append(
+                {"name": label.name, "bg_color": label.color, "text_color": "#000000", "id": label.id}
+            )
     return gitlab_labels_dict
 
 
-def get_issues(gitlab_project, iid_filter, labels_filter, opened_closed_filter):
-    if not opened_closed_filter:
-        opened_closed_filter = "opened"
-    params = {
-        "get_all": True,
-        "state": opened_closed_filter,
-    }
-    if iid_filter[0] != "":
-        params["iids"] = iid_filter
-    if labels_filter != [""]:
-        params["labels"] = labels_filter
-    return gitlab_project.issues.list(**params)
+def get_issues(gitlab_project):
+    issues_data = []
+    gitlab_issues = gitlab_project.issues.list(get_all=True)
+    for gitlab_issue in gitlab_issues:
+        issues_data.append(
+            {
+                "iid": gitlab_issue.iid,
+                "title": gitlab_issue.title,
+                "state": gitlab_issue.state,
+                "labels": gitlab_issue.labels,
+                "author": gitlab_issue.author["name"],
+            }
+        )
+    return issues_data

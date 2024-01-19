@@ -5,7 +5,7 @@ createApp({
     setup() {
         const issues = ref([])
         const labels = ref([])
-
+        const project = ref()
         onMounted(async () => {
             const url = window.location.href;
             const result = /\/projects\/(?<id>\d+)\/selection\/$/.exec(url)
@@ -13,7 +13,6 @@ createApp({
 
             const labelsResponse = await fetch(`/projects/${id}/labels/`)
             labels.value = await labelsResponse.json()
-
             const issuesResponse = await fetch(`/projects/${id}/issues/`)
             issues.value = await issuesResponse.json()
             issues.value = issues.value.map(issue => ({...issue, checked: false}))
@@ -45,11 +44,13 @@ createApp({
         };
 
         return {
+            labels,
             issues,
             getColors,
             nbChecked,
             allChecked,
             toggleAllCheckboxes,
+
         }
     },
 }).mount('#app')

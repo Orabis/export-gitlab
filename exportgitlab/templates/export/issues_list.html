@@ -39,15 +39,13 @@
                         </div>
                     </div>
                     <div class="labels-filter">
-                        {% for label in gitlab_labels %}
-                            <div>
-                                <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
-                                <label for="checkbox_{{ attrs.id }}">
-                                    <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}"
-                                          class="label">{{ label }}</span>
-                                </label>
-                            </div>
-                        {% endfor %}
+                        <div v-for="tag in labels" :key="tag.id">
+                            <input type="checkbox" :id="`checkbox_${ tag.id }`" name="lab" :value="tag.id">
+                            <label :for="`checkbox_${ tag.id }`">
+                                <span :style="{backgroundColor: getColors(tag.name).bgColor, color: getColors(tag.name).textColor}"
+                                      class="label">{$ tag.name $}</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </form>

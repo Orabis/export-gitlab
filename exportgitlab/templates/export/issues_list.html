@@ -20,16 +20,16 @@
                     <div class="col-md-2">
                         <label for="iids">
                             ID:
-                            <input class="form-control" name="iid" id="iids" placeholder="1,2,3,4">
+                            <input class="form-control" name="iid" id="iids" placeholder="1,2,3,4" v-model="ids">
                         </label>
                         <fieldset class="status-group">
                             <legend class="legend-status">{% trans "Status :" %}</legend>
                             <label for="opened">
-                                <input type="radio" name="oc" id="opened" value="opened" checked required>
+                                <input type="radio" name="oc" id="opened" value="opened" v-model="issuesStates" checked>
                                 {% trans "Open" %}
                             </label>
                             <label for="closed">
-                                <input type="radio" name="oc" id="closed" value="closed">
+                                <input type="radio" name="oc" id="closed" value="closed" v-model="issuesStates">
                                 {% trans "Close" %}
                             </label>
                         </fieldset>
@@ -40,7 +40,8 @@
                     </div>
                     <div class="labels-filter">
                         <div v-for="tag in labels" :key="tag.id">
-                            <input type="checkbox" :id="`checkbox_${ tag.id }`" name="lab" :value="tag.id">
+                            <input type="checkbox" :id="`checkbox_${ tag.id }`" name="lab" :value="tag.name"
+                                   v-model="selectedLabels">
                             <label :for="`checkbox_${ tag.id }`">
                                 <span :style="{backgroundColor: getColors(tag.name).bgColor, color: getColors(tag.name).textColor}"
                                       class="label">{$ tag.name $}</span>
@@ -60,7 +61,8 @@
                         <p><strong>{% trans "Download issues selections :" %}</strong></p>
                         <div class="download-group">
                             <div class="check-all">
-                                <input type="checkbox" id="selectAll" :checked="allChecked" @change="toggleAllCheckboxes"/>
+                                <input type="checkbox" id="selectAll" :checked="allChecked"
+                                       @change="toggleAllCheckboxes"/>
                                 <label for="selectAll">
                                 <span id="check_all_on" style="display: block;">
                                     {% trans "Check all" %}
@@ -88,7 +90,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="issue in issues" :key="issue.iid">
+                <tr v-for="issue in issuesFiltered" :key="issue.iid">
                     <td>
                         <input class="form-check-input" type="checkbox" name="checkbox_issues"
                                :id="`issue_${ issue.iid }`" :value="issue.iid" v-model="issue.checked">

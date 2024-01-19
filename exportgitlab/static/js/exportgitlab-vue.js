@@ -5,7 +5,10 @@ createApp({
     setup() {
         const issues = ref([])
         const labels = ref([])
-        const project = ref()
+        const selectedLabels = ref([]);
+        const issuesStates = ref("opened");
+        const ids = ref("")
+
         onMounted(async () => {
             const url = window.location.href;
             const result = /\/projects\/(?<id>\d+)\/selection\/$/.exec(url)
@@ -17,6 +20,25 @@ createApp({
             issues.value = await issuesResponse.json()
             issues.value = issues.value.map(issue => ({...issue, checked: false}))
         })
+
+        const onChange = (newValue) => {
+            console.log(newValue.target)
+            issuesStates.value = newValue.target.value
+        }
+
+        const issuesFiltered = computed(() => {
+            if (selectedLabels.value.length === 0) {
+                return issues.value.filter((issue) => {
+                    return issuesStates.value === issue.states;
+                })
+            }
+            return issues.value.filter((issue) => {
+                return issue.labels.some((label) => {
+                    return selectedLabels.value.includes(label)
+                }) && issuesStates.value === issue.states;
+            })
+        })
+
 
         const getColors = (labelName) => {
             const label = labels.value.find((label) => label.name === labelName)
@@ -42,7 +64,6 @@ createApp({
                 issue.checked = isChecked;
             });
         };
-
         return {
             labels,
             issues,
@@ -50,7 +71,11 @@ createApp({
             nbChecked,
             allChecked,
             toggleAllCheckboxes,
-
+            selectedLabels,
+            issuesFiltered,
+            issuesStates,
+            onChange,
+            ids,
         }
     },
 }).mount('#app')

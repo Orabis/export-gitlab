@@ -33,7 +33,7 @@ def get_issues(gitlab_project):
             {
                 "iid": gitlab_issue.iid,
                 "title": gitlab_issue.title,
-                "state": gitlab_issue.state,
+                "states": gitlab_issue.state,
                 "labels": gitlab_issue.labels,
                 "author": gitlab_issue.author["name"],
             }

@@ -5,10 +5,11 @@ createApp({
     setup() {
         const issues = ref([])
         const labels = ref([])
-        const selectedLabels = ref([]);
-        const issuesStates = ref("opened");
-        const ids = ref("");
-        const filteredIds = ref([]);
+        const selectedLabels = ref([])
+        const issuesStates = ref("opened")
+        const ids = ref("")
+        const filteredIds = ref([])
+        const visibleIssueCount = ref(20)
 
         onMounted(async () => {
             const url = window.location.href;
@@ -36,7 +37,11 @@ createApp({
             issuesStates.value = newValue.target.value
         }
 
-
+        const showMoreIssues = () => {
+            visibleIssueCount.value += 10
+        }
+        const visibleIssues = computed(() => issuesFiltered.value.slice(0, visibleIssueCount.value))
+        const allIssuesDisplayed = computed(() => visibleIssueCount.value >= issuesFiltered.value.length)
         const issuesFiltered = computed(() => {
 
             if (filteredIds.value.length === 0 && selectedLabels.value.length === 0) {
@@ -95,6 +100,9 @@ createApp({
             onChange,
             ids,
             filteredIds,
+            showMoreIssues,
+            visibleIssues,
+            allIssuesDisplayed,
         }
     },
 }).mount('#app')

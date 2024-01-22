@@ -113,20 +113,10 @@ def refresh_project(request, id_pj):
 @gitlab_valid_auth_required
 def list_all_issues(request, id_pj):
     project_model: Project = get_object_or_404(Project, id=id_pj)
-    gitlab_project: GLProject = request.gl.projects.get(project_model.gitlab_id)
-    gitlab_labels_dict = get_labels_list(gitlab_project)
-    iid_filter = [request.GET.get("iid")]
-    labels_filter = request.GET.getlist("lab")
-    opened_closed_filter = request.GET.get("oc")
-
-    list_issues = get_issues(gitlab_project)
-    paginator = Paginator(list_issues, 25)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
     return render(
         request,
         "export/issues_list.html",
-        {"project": project_model, "page_obj": page_obj, "gitlab_labels": gitlab_labels_dict},
+        {"project": project_model},
     )
 
 

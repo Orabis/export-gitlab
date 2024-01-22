@@ -1,4 +1,4 @@
-import {computed, createApp, onMounted, ref} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import {computed, createApp, onMounted, ref, watch} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
 createApp({
     delimiters: ['{$', '$}'],
@@ -7,7 +7,8 @@ createApp({
         const labels = ref([])
         const selectedLabels = ref([]);
         const issuesStates = ref("opened");
-        const ids = ref("")
+        const ids = ref("");
+        const filteredIds = ref([]);
 
         onMounted(async () => {
             const url = window.location.href;
@@ -21,15 +22,32 @@ createApp({
             issues.value = issues.value.map(issue => ({...issue, checked: false}))
         })
 
+        watch(ids, async () => {
+            const matches = ids.value.match(/\d+/g);
+            if (matches) {
+                filteredIds.value = matches.map(Number);
+            } else {
+                filteredIds.value = []
+            }
+
+        })
         const onChange = (newValue) => {
             console.log(newValue.target)
             issuesStates.value = newValue.target.value
         }
 
+
         const issuesFiltered = computed(() => {
-            if (selectedLabels.value.length === 0) {
+
+            if (filteredIds.value.length === 0 && selectedLabels.value.length === 0) {
                 return issues.value.filter((issue) => {
-                    return issuesStates.value === issue.states;
+                    return issuesStates.value === issue.states
+                })
+            }
+
+            if (filteredIds.value.length >= 1) {
+                return issues.value.filter((issue) => {
+                    return filteredIds.value.includes(issue.iid)
                 })
             }
             return issues.value.filter((issue) => {
@@ -76,6 +94,7 @@ createApp({
             issuesStates,
             onChange,
             ids,
+            filteredIds,
         }
     },
 }).mount('#app')

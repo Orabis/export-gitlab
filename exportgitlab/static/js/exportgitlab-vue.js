@@ -77,14 +77,14 @@ createApp({
             return acc
         }, 0))
         const allChecked = computed(() => {
-            if (issues.value.length === 0) return false
+            if (visibleIssues.value.length === 0) return false
 
-            return issues.value.every((issue) => issue.checked)
+            return visibleIssues.value.every((visibleIssue) => visibleIssue.checked)
         })
         const toggleAllCheckboxes = () => {
             const isChecked = !allChecked.value;
-            issues.value.forEach((issue) => {
-                issue.checked = isChecked;
+            visibleIssues.value.forEach((visibleIssue) => {
+                visibleIssue.checked = isChecked;
             });
         };
         return {

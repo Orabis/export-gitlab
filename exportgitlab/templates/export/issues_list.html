@@ -2,132 +2,119 @@
 {% load i18n %}
 {% load export_extras %}
 {% load static %}
-{% block title %}{% trans "issues"%}{% endblock title %}
+{% block title %}{% trans "issues" %}{% endblock title %}
 
 {% block foot-javascript %}
     <script src="{% static 'js/exportgitlab.js' %}"></script>
+    <script type="module" src="{% static 'js/exportgitlab-vue.js' %}"></script>
 {% endblock foot-javascript %}
 
 
 {% block content %}
-<div class="container">
-    <h4>Project ID: {{ project.gitlab_id }} - {{ project.name }} - Issues</h4>
-    <aside class="well">
-        <span><strong>{% trans "Filtering issues :" %}</strong></span>
-        <form method="GET" class="form-gitlab-token" action="{% url "list_all_issues" id_pj=project.id%}">
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="iids">
-                        ID:
-                        <input class="form-control" name="iid" id="iids" placeholder="1,2,3,4">
-                    </label>
-                    <fieldset class="status-group">
-                        <legend class="legend-status">{% trans "Status :" %}</legend>
-                        <label for="opened">
-                            <input type="radio" name="oc" id="opened" value="opened" checked required>
-                            {% trans "Open" %}
+    <div class="container" id="app">
+        <h4>Project ID: {{ project.gitlab_id }} - {{ project.name }} - Issues</h4>
+        <aside class="well">
+            <span><strong>{% trans "Filtering issues :" %}</strong></span>
+            <form method="GET" class="form-gitlab-token" action="{% url "list_all_issues" id_pj=project.id %}">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="iids">
+                            ID:
+                            <input type="text" class="form-control" name="iid" id="iids" placeholder="1,2,3,4" v-model="ids">
                         </label>
-                        <label for="closed">
-                            <input type="radio" name="oc" id="closed" value="closed">
-                            {% trans  "Close" %}
-                        </label>
-                    </fieldset>
-                    <div class="button-form">
-                        <button class="btn btn-default" type="submit">{% trans "Filter"%}</button>
-                        <button class="btn btn-default" type="reset">{% trans "Reset" %}</button>
+                        <fieldset class="status-group">
+                            <legend class="legend-status">{% trans "Status :" %}</legend>
+                            <label for="opened">
+                                <input type="radio" name="oc" id="opened" value="opened" v-model="issuesStates" checked>
+                                {% trans "Open" %}
+                            </label>
+                            <label for="closed">
+                                <input type="radio" name="oc" id="closed" value="closed" v-model="issuesStates">
+                                {% trans "Close" %}
+                            </label>
+                        </fieldset>
+                    </div>
+                    <div class="labels-filter">
+                        <div v-for="tag in labels" :key="tag.id">
+                            <input type="checkbox" :id="`checkbox_${ tag.id }`" name="lab" :value="tag.name"
+                                   v-model="selectedLabels">
+                            <label :for="`checkbox_${ tag.id }`">
+                                <span :style="{backgroundColor: getColors(tag.name).bgColor, color: getColors(tag.name).textColor}"
+                                      class="label">{$ tag.name $}</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
-                <div class="labels-filter">
-                    {% for label in gitlab_labels %}
-                        <div>
-                            {% with attrs=gitlab_labels|get_value:label %}
-                            <input type="checkbox" id="checkbox_{{ attrs.id }}" name="lab" value="{{ label }}">
-                            <label for="checkbox_{{ attrs.id }}">
-                                <span style="background-color:{{ attrs.bg_color }}; color:{{ attrs.text_color }}" class="label">{{ label }}</span>
-                                {% endwith %}
-                            </label>    
-                        </div>
-                    {% endfor %}
+            </form>
+        </aside>
+
+        <form method='POST' id="issue_form" action="{% url "download_report_issues" id_pj=project.id %}">
+            {% csrf_token %}
+            <div v-if="!issues.length" class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+                    <span class="sr-only">Loading ...</span>
                 </div>
             </div>
-        </form>
-    </aside>
-
-    <form method='POST' id="issue_form" action="{% url "download_report_issues" id_pj=project.id%}">
-        {% csrf_token %}
-        <div class="check-all">
-            <input type="checkbox" id="selectAll"/>
-            <label for="selectAll">
-                <span id="check_all_on" style="display: block;">
-                    {% trans "Check all" %}
-                </span>
-                <span id="check_all_off" style="display: none;">
-                    {% trans "Uncheck all" %}
-                </span>
-            </label>
-        </div>
-        <table class="table">
-            <thead>
+            <table class="table">
+                <thead>
                 <tr>
                     <td>
                         <p><strong>{% trans "Download issues selections :" %}</strong></p>
                         <div class="download-group">
-                            <button class="btn btn-default" type="submit" id="issue_dl_button" disabled>{% trans "Download" %}</button>
+                            <div class="check-all">
+                                <input type="checkbox" id="selectAll" :checked="allChecked"
+                                       @change="toggleAllCheckboxes"/>
+                                <label for="selectAll">
+                                <span v-if="nbChecked === 0" id="check_all_on">
+                                    {% trans "Check all" %}
+                                </span>
+                                <span v-else id="check_all_off">
+                                    {% trans "Uncheck all" %}
+                                </span>
+                                </label>
+                            </div>
+                            <button class="btn btn-default" type="submit" id="issue_dl_button"
+                                    :disabled="nbChecked <= 0">{% trans "Download" %}</button>
                             <label for="group_issue">
-                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue" disabled checked>
+                                <input type="radio" name="grp-ungrp" id="group_issue" value="group_issue"
+                                       :disabled="nbChecked <= 0"
+                                       checked>
                                 {% trans "Download in group" %}
                             </label>
                             <label for="ungroup_issue">
-                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue" disabled>
+                                <input type="radio" name="grp-ungrp" id="ungroup_issue" value="ungroup_issue"
+                                       :disabled="nbChecked <= 1">
                                 {% trans "Download separately" %}
                             </label>
                         </div>
                     </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for issue in page_obj %}
-                    <tr>
+                </thead>
+                <tbody>
+                    <tr v-for="issue in visibleIssues" :key="issue.iid">
                         <td>
-                            <input class="form-check-input" type="checkbox" name="checkbox_issues" id="issue_{{issue.iid }}" value="{{ issue.iid }}">
-                            <label for="issue_{{issue.iid }}">
-                                <span>{{ issue.iid }} - {{ issue.title }}</span>
-                                <span class="text-muted">{{ issue.author.name }}</span>
+                            <input class="form-check-input" type="checkbox" name="checkbox_issues"
+                                   :id="`issue_${ issue.iid }`" :value="issue.iid" v-model="issue.checked">
+                            <label :for="`issue_${ issue.iid }`">
+                                <span>{$ issue.iid $} - {$ issue.title $}</span>
+                                <span class="text-muted">{$ issue.author $}</span>
                             </label>
                             <div>
-                                {% for tag in issue.labels %}
-                                    {% with color=gitlab_labels|get_value:tag %}
-                                        <span style="background-color:{{ color.bg_color }}; color:{{ color.text_color }}" class="label">{{ tag }}</span>
-                                    {% endwith %}
-                                {% endfor %}
+                                <span v-for="tag in issue.labels"
+                                      :key="issue.iid + tag"
+                                      :style="{backgroundColor: getColors(tag).bgColor, color: getColors(tag).textColor}"
+                                      class="label"
+                                >{$ tag $}</span>
                             </div>
                         </td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </form>
-</div>
-
-{% if page_obj.next_page_number > 1 or page_obj.has_previous %}
-<div class="container flex">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li><a href="?page=1">&laquo; {% trans "first" %}</a></li>
-                <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a></li>
-            {% endif %}
-
-            <li class="disabled">
-                <span>
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-            </li>
-
-            {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a></li>
-                <li><a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a></li>
-            {% endif %}
-        </ul>
-</div>
-{% endif %}
+                </tbody>
+            </table>
+        </form>
+        <div class="text-center">
+            <strong><button class="btn btn-link" v-if="!allIssuesDisplayed" @click="showMoreIssues">
+                {% trans "Show More" %}
+            </button></strong>
+        </div>
+    </div>
 {% endblock %}

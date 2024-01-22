@@ -81,7 +81,6 @@
     border-bottom: 2px solid #ddd;
     display: flex;
     padding-bottom: 4px;
-/
 }
 
 .vertical-center {
@@ -89,12 +88,9 @@
 }
 
 .legend-status {
-    margin-bottom: 3px;
-!important;
-    font-size: 14px;
-!important;
-    border: 0;
-!important;
+    margin-bottom: 3px !important;
+    font-size: 14px !important;
+    border: 0 !important;
     font-weight: bold;
 
 }
@@ -109,7 +105,6 @@
     position: absolute !important;
     width: 1px !important;
     white-space: nowrap !important;
-/ 1 /
 }
 
 .filter {
@@ -121,14 +116,15 @@
 .labels-filter {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+}
 
+.container span {
+    margin-left: 2px;
 }
 
 .check-all {
-    padding-left: 8px;
     margin-top: 25px;
-    margin-bottom: 0;
-!important;
+    margin-bottom: 0 !important;
 }
 
 .download-group {
@@ -138,12 +134,10 @@
     margin-top: 3px;
 }
 
-.download-group button {
-    margin-top: 3px;
-}
-
 .status-group {
-    margin-top: 15px
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 aside.well .row {

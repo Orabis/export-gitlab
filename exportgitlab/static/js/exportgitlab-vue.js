@@ -32,11 +32,6 @@ createApp({
             }
 
         })
-        const onChange = (newValue) => {
-            console.log(newValue.target)
-            issuesStates.value = newValue.target.value
-        }
-
         const showMoreIssues = () => {
             visibleIssueCount.value += 10
         }
@@ -97,7 +92,6 @@ createApp({
             selectedLabels,
             issuesFiltered,
             issuesStates,
-            onChange,
             ids,
             filteredIds,
             showMoreIssues,

@@ -38,30 +38,44 @@ def user_change_token(request):
 @login_required
 @gitlab_valid_auth_required
 def list_all_projects_homepage(request):
-    project_models = Project.objects.all()
-    paginator = Paginator(project_models, 10)
+    project_models = Project.objects.filter(user=request.user)
 
     if request.GET.get("project_name_filter"):
         name_filter = request.GET.get("project_name_filter")
-        all_projects = Project.objects.filter(name__contains=name_filter)
-        paginator = Paginator(all_projects, 10)
+        project_models = project_models.filter(name__icontains=name_filter)
 
-    if request.method == "POST":
-        form = GitlabIDForm(request.POST)
-        if form.is_valid():
-            project_id = form.cleaned_data["gitlab_id"]
+    if request.POST.get("retrieve_project"):
+        gitlab_id = request.POST.get("retrieve_project")
+        try:
+            int(gitlab_id)
+        except ValueError:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _("ID error, Invalid ID entered."),
+            )
+            return redirect("list_all_projects_homepage")
+
+        try:
+            project_model = Project.objects.get(gitlab_id=gitlab_id)
+            request.user.projects.add(project_model)
+
+        except Project.DoesNotExist:
             try:
-                project_gitlab: GLProject = request.gl.projects.get(project_id)
-                project_model: Project = form.save(commit=False)
-                project_model.url = project_gitlab.web_url
-                project_model.name = project_gitlab.name_with_namespace
-                project_model.description = project_gitlab.description
+                project_gitlab = request.gl.projects.get(gitlab_id)
+                project_model = Project(
+                    gitlab_id=project_gitlab.id,
+                    name=project_gitlab.name_with_namespace,
+                    url=project_gitlab.web_url,
+                    description=project_gitlab.description,
+                )
                 project_model.save()
+                request.user.projects.add(project_model)
                 messages.add_message(
                     request,
                     messages.SUCCESS,
                     _("Project : [%(project_name)s] added to database. id : %(project_id)s")
-                    % {"project_name": project_model.name, "project_id": project_id},
+                    % {"project_name": project_model.name, "project_id": gitlab_id},
                 )
                 return redirect("list_all_projects_homepage")
 
@@ -70,18 +84,11 @@ def list_all_projects_homepage(request):
                     messages.add_message(request, messages.ERROR, _("Project does not exist"))
                 else:
                     messages.add_message(request, messages.ERROR, _("An error occurred while checking the project"))
-        else:
-            messages.add_message(
-                request,
-                messages.ERROR,
-                _("ID error (Project is already in the database ? Error in entering the ID ?)"),
-            )
-    else:
-        form = GitlabIDForm()
 
+    paginator = Paginator(project_models, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "export/projects_list.html", {"page_obj": page_obj, "form": form})
+    return render(request, "export/projects_list.html", {"page_obj": page_obj})
 
 
 @login_required

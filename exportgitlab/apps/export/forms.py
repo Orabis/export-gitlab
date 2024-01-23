@@ -11,9 +11,3 @@ class UserForm(forms.ModelForm):
         widgets = {
             "gitlab_token": PasswordInput(render_value=True),
         }
-
-
-class GitlabIDForm(forms.ModelForm):
-    class Meta:
-        model = Project
-        fields = ["gitlab_id"]

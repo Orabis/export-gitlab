@@ -96,10 +96,10 @@ def list_all_projects_homepage(request):
 def refresh_project(request, id_pj):
     try:
         project_model = Project.objects.get(id=id_pj)
-        project_info = request.gl.projects.get(project_model.gitlab_id)
-        project_model.name = project_info.name_with_namespace
-        project_model.description = project_info.description
-        project_model.url = project_info.web_url
+        project_gitlab = request.gl.projects.get(project_model.gitlab_id)
+        project_model.name = project_gitlab.name_with_namespace
+        project_model.description = project_gitlab.description
+        project_model.url = project_gitlab.web_url
         project_model.save()
         messages.add_message(
             request,

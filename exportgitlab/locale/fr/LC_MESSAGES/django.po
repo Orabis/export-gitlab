@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 16:33+0100\n"
+"POT-Creation-Date: 2024-01-23 11:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,29 +38,29 @@ msgstr "Token Gitlab modifié"
 msgid "Wrong Gitlab token"
 msgstr "Mauvais token Gitlab"
 
-#: exportgitlab/apps/export/views.py:63
+#: exportgitlab/apps/export/views.py:55
+msgid "ID error, Invalid ID entered."
+msgstr "Erreur ID, Identifiant invalide"
+
+#: exportgitlab/apps/export/views.py:77
 #, python-format
 msgid "Project : [%(project_name)s] added to database. id : %(project_id)s"
 msgstr "Projet : [%(project_name)s] ajouté dans la db. id : %(project_id)s"
 
-#: exportgitlab/apps/export/views.py:70 exportgitlab/apps/export/views.py:105
+#: exportgitlab/apps/export/views.py:84 exportgitlab/apps/export/views.py:112
 msgid "Project does not exist"
 msgstr "Le Projet n'existe pas"
 
-#: exportgitlab/apps/export/views.py:72 exportgitlab/apps/export/views.py:107
+#: exportgitlab/apps/export/views.py:86 exportgitlab/apps/export/views.py:114
 msgid "An error occurred while checking the project"
 msgstr "Une erreur s'est produite lors de la vérification du projet."
 
-#: exportgitlab/apps/export/views.py:77
-msgid "ID error (Project is already in the database ? Error in entering the ID ?)"
-msgstr "Erreur ID (Le Projet est dejà dans la base de donnée ? Faute de frappe ?) "
-
-#: exportgitlab/apps/export/views.py:100
+#: exportgitlab/apps/export/views.py:107
 #, python-format
 msgid "Refresh of [%(project_name)s] complete. id : %(project_model_gitlab_id)d"
 msgstr "Actualisation du projet [%(project_name)s] id : %(project_model_gitlab_id)d"
 
-#: exportgitlab/apps/export/views.py:137
+#: exportgitlab/apps/export/views.py:144
 msgid "Error downloading issues"
 msgstr "Erreur de téléchargement "
 
@@ -220,6 +220,11 @@ msgstr "Nom d'utilisateur :"
 #: exportgitlab/templates/export/user_profile.html:36
 msgid "Change the token "
 msgstr "Changer le token"
+
+#~ msgid ""
+#~ "ID error (Project is already in the database ? Error in entering the ID ?)"
+#~ msgstr ""
+#~ "Erreur ID (Le Projet est dejà dans la base de donnée ? Faute de frappe ?) "
 
 #, fuzzy
 #~| msgid "Token Reset"

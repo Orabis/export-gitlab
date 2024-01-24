@@ -33,9 +33,7 @@ class IssuesViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="John", gitlab_token="gyyat1234")
         self.project = Project.objects.create(gitlab_id="34755", name="TestPj", description=None, url="TestPj/")
-
-    @responses.activate
-    def test_view_issues(self):
+        self.client.force_login(self.user)
         responses.add(get_profile_response())
         responses.add(
             responses.GET,
@@ -44,18 +42,22 @@ class IssuesViewTest(TestCase):
         )
         responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/labels", json=labels_json)
         responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/issues?labels=", json=issues_json)
-        self.client.force_login(self.user)
-        response = self.client.get(reverse("list_all_issues", kwargs={"id_pj": self.project.id}))
+        responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/issues", json=issues_json)
+
+    @responses.activate
+    def test_api_issues(self):
+        response = self.client.get(reverse("issues_info", kwargs={"id_pj": self.project.id}))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn(
-            issues_json[0]["title"],
-            response.content.decode("utf-8"),
-        )
-        self.assertIn(
-            str(project_json["id"]),
-            response.content.decode("utf-8"),
-        )
-        self.assertIn(
-            labels_json[0]["name"],
-            response.content.decode("utf-8"),
-        )
+        self.assertIn(issues_json[0]["title"], response.content.decode("utf-8"))
+
+    @responses.activate
+    def test_api_labels(self):
+        response = self.client.get(reverse("labels_info", kwargs={"id_pj": self.project.id}))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn(labels_json[0]["name"], response.content.decode("utf-8"))
+
+    @responses.activate
+    def test_api_project(self):
+        response = self.client.get(reverse("project_info", kwargs={"id_pj": self.project.id}))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn(str(project_json["id"]), response.content.decode("utf-8"))

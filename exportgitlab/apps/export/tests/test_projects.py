@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 
 from django.contrib import messages
 from django.test import RequestFactory, TestCase
@@ -43,6 +43,7 @@ class ProjectsTest(TestCase):
     def test_project_filter_name_return_when_exist(self):
         data = {"project_name_filter": "TestPj"}
         self.client.force_login(self.user)
+        self.user.projects.add(self.project)
         response = self.client.get(self.url, data)
         project_context = response.context["page_obj"]
         self.assertEqual(project_context.object_list.pop(), self.project)
@@ -51,10 +52,11 @@ class ProjectsTest(TestCase):
     def test_create_project_post(self):
         with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:
             project_mock = gl_mock().projects.get.return_value
+            project_mock.id = "1"
             project_mock.name_with_namespace = "Testgyat"
             project_mock.web_url = "https://example.com"
             project_mock.description = "Test description"
-            request = RequestFactory().post(reverse("list_all_projects_homepage"), data={"gitlab_id": 1})
+            request = RequestFactory().post(reverse("list_all_projects_homepage"), data={"retrieve_project": 1})
             request._messages = messages.storage.default_storage(request)
             request.user = self.user
             request.gl = gl_mock
@@ -66,11 +68,11 @@ class ProjectsTest(TestCase):
 
     def test_create_project_error_invalid_form(self):
         self.client.force_login(self.user)
-        data = {"gyat": "test", "bdfgf": "hdfhdf74"}
+        data = {"retrieve_project": "azvgaebgef"}
         response = self.client.post(self.url, data)
         self.assertEqual(
-            str(response.wsgi_request._messages._loaded_messages[0]),
-            "Erreur ID (Le Projet est dejà dans la base de donnée ? Faute de frappe ?) ",
+            str(response.wsgi_request._messages._queued_messages[0]),
+            "Erreur ID, Identifiant invalide",
         )
 
     def test_create_project_error_404(self):
@@ -88,7 +90,7 @@ class ProjectsTest(TestCase):
             self.assertEqual(response.status_code, 200)
 
     def make_request(self, gl_mock):
-        request = RequestFactory().post(reverse("list_all_projects_homepage"), data={"gitlab_id": 1})
+        request = RequestFactory().post(reverse("list_all_projects_homepage"), data={"retrieve_project": 1})
         request._messages = messages.storage.default_storage(request)
         request.user = self.user
         request.gl = gl_mock

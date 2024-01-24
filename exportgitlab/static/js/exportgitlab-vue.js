@@ -1,4 +1,4 @@
-import {computed, createApp, onMounted, ref, watch} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import {computed, createApp, onMounted, ref, watch} from 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js'
 
 createApp({
     delimiters: ['{$', '$}'],

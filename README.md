@@ -2,7 +2,8 @@
 
 ## Description
 
-L'application Export-GitLab simplifie l'exportation des issues d'un projet, permettant de les télécharger au format PDF.
+L'application Export-GitLab simplifie l'exportation des issues d'un projet, permettant de les télécharger au format PDF. 
+Ce projet à été réalisé pendant mon stage à la DNUM, et elle restera privé. (version d'origine)
 
 ### Première utilisation
 
@@ -45,4 +46,5 @@ L'application comporte 3 interfaces :
 
 ## Informations Complémentaires
 
-Contact : lmerkel@unistra.fr
+- Contact unistra : lmerkel@unistra.fr
+- Contact global : cdf.leo.merkel@gmail.com

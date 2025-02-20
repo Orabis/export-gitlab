@@ -10,7 +10,6 @@ urlpatterns = [
     # Examples:
     path("", include("exportgitlab.apps.export.urls")),
     path("admin/", admin.site.urls),
-    path("cas/", include("django_cas.urls")),
 ]
 
 # debug toolbar for dev

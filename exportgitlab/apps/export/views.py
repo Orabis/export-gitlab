@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -6,6 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from gitlab import GitlabGetError
 from gitlab.v4.objects import Project as GLProject
+from .forms import LoginForm, RegisterForm
 
 from ...libs.gitlab import get_issues, get_labels_list
 from ...libs.reports_generation import *
@@ -13,8 +15,7 @@ from .decorators import gitlab_valid_auth_required
 from .forms import *
 from .models import *
 
-
-@login_required
+ 
 def user_profile(request):
     return render(request, "export/user_profile.html", {"user": request.user})
 
@@ -171,3 +172,36 @@ def issues_info(request, id_pj):
 
 def index(request):
     return redirect("list_all_projects_homepage")
+
+def login_view(request):
+    login_form = LoginForm()
+    register_form = RegisterForm()
+    next_url = request.GET.get("next","home")
+
+    if request.method == "POST":
+        if "login_submit" in request.POST:
+            login_form = LoginForm(request.POST)
+            if login_form.is_valid():
+                username = login_form.cleaned_data["username"]
+                password = login_form.cleaned_data["password"]
+                user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect(next_url)
+            else:
+                login_form.add_error(None, "Identifiants incorrects")
+        elif "register_submit" in request.POST:
+            register_form = RegisterForm(request.POST)
+            if register_form.is_valid():
+                username = register_form.cleaned_data["username"]
+                email = register_form.cleaned_data["email"]
+                password = register_form.cleaned_data["password"]
+            if User.objects.filter(username=username).exists():
+                register_form.add_error("username", "Nom d'utilisateur déjà utilisé")
+            elif User.objects.filter(email=email).exists():
+                register_form.add_error("email", "Adresse email déjà utilisée")
+            else:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                login(request, user)
+                return redirect(next_url)
+    return render(request, "export/user_login.html", {"login_form": login_form, "register_form": register_form})

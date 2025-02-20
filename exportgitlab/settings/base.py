@@ -184,9 +184,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_cas.middleware.CASMiddleware',
-]
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',]
 
 #####################
 # Url configuration #
@@ -218,9 +216,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'django_extensions',
-    'django_cas',
-]
+    'django_extensions'
+    ]
 
 LOCAL_APPS = [
     'exportgitlab',
@@ -239,81 +236,12 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 # Log configuration #
 #####################
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            'format': '%(levelname)s %(asctime)s %(name)s:%(lineno)s %(message)s'
-        },
-        'django.server': {
-            '()': 'django.utils.log.ServerFormatter',
-            'format': '[%(server_time)s] %(message)s',
-        },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-        },
-        'django.server': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'django.server',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '',
-            'maxBytes': 209715200,
-            'backupCount': 3,
-            'formatter': 'default'
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'mail_admins'],
-            'level': 'INFO',
-        },
-        'django.server': {
-            'handlers': ['django.server'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'exportgitlab': {
-            'handlers': ['mail_admins', 'file'],
-            'level': 'ERROR',
-            'propagate': True
-        }
-    }
-}
-
-
 def username_format(username):
     return username.lower()
 
 
 AUTH_USER_MODEL = 'export.User'
-CAS_SERVER_URL = 'https://cas.unistra.fr/cas/'
-# CAS_LOGOUT_COMPLETELY = True
-CAS_USERNAME_FORMAT = username_format
-AUTHENTICATION_BACKENDS = ("django_cas.backends.CASBackend",)
-LOGIN_URL = '/cas/login'
 WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'
-SENTRY_DSN = "https://c838390b0adff873f1057b83d460f3b5@sentry.app.unistra.fr/58"
 DEFAULT_FROM_EMAIL = "ne-pas-repondre@unistra.fr"
-USERS_EMAILS = ["lmerkel@unistra.fr", "dbessey@unistra.fr"]
+USERS_EMAILS = ["cdf.leo.merkel@gmail.com"]
+LOGIN_URL = '/accounts/login/'

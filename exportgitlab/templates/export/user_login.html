@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+<body>
+    <ul>
+        <li><a href="#" onclick="showForm('login')">Connexion</a></li>
+        <li><a href="#" onclick="showForm('register')">Inscription</a></li>
+    </ul>
+    
+    <div id="login_form">
+        <form method="post">
+            {% csrf_token %}
+            {{ login_form.as_p }}
+            {% if login_form.non_field_errors %}
+                <div style="color: red;">{{ login_form.non_field_errors }}</div>
+            {% endif %}
+            <button type="submit" name="login_submit">Se connecter</button>
+        </form>
+    </div>
+    
+    <div id="register_form" style="display: none;">
+        <form method="post">
+            {% csrf_token %}
+            {{ register_form.as_p }}
+            {% if register_form.non_field_errors %}
+                <div style="color: red;">{{ register_form.non_field_errors }}</div>
+            {% endif %}
+            <button type="submit" name="register_submit">S'inscrire</button>
+        </form>
+    </div>
+    
+    <script>
+    function showForm(formType) {
+        document.getElementById("login_form").style.display = (formType === 'login') ? "block" : "none";
+        document.getElementById("register_form").style.display = (formType === 'register') ? "block" : "none";
+    }
+    </script>
+</body>
+</html>

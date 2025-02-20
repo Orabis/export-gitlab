@@ -28,7 +28,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'ssl')
 # Log configuration #
 #####################
 
-LOGGING['handlers']['file']['filename'] = '{{ remote_current_path }}/log/app.log'
 
 
 ##############

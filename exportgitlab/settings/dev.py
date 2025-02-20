@@ -26,34 +26,19 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': environ.get('DEFAULT_DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': environ.get('DEFAULT_DB_NAME', 'exportgitlab'),
-        'USER': environ.get('DEFAULT_DB_USER', 'exportgitlab'),
-        'PASSWORD': environ.get('DEFAULT_DB_PASSWORD', 'exportgitlab'),
+        'NAME': environ.get('DEFAULT_DB_NAME', 'testdb'),
+        'USER': environ.get('DEFAULT_DB_USER', 'dev_dbuser'),
+        'PASSWORD': environ.get('DEFAULT_DB_PASSWORD', 'password'),
         'HOST': environ.get('DEFAULT_DB_HOST', 'localhost'),
         'PORT': environ.get('DEFAULT_DB_PORT', '5432'),
     }
 }
-
 
 ############################
 # Allowed hosts & Security #
 ############################
 
 ALLOWED_HOSTS = ['*']
-
-
-#####################
-# Log configuration #
-#####################
-
-LOGGING['handlers']['file']['filename'] = environ.get(
-    'LOG_DIR',
-    Path('/tmp').resolve(strict=True) / f'{SITE_NAME}.log',
-)
-LOGGING['handlers']['file']['level'] = 'DEBUG'
-
-for logger in LOGGING['loggers']:
-    LOGGING['loggers'][logger]['level'] = 'DEBUG'
 
 
 ###########################
@@ -83,8 +68,6 @@ MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
-
-CAS_SERVER_URL = 'https://cas-dev.unistra.fr/cas/'
 
 WKHTML_TO_PDF_URL = "http://localhost:8001"
 

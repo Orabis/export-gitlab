@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import PasswordInput
-
+from django.utils.translation import gettext_lazy as _
 from .models import *
 
 
@@ -15,20 +15,31 @@ class UserForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=150,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Nom d'utilisateur"})
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+        label=_("Username")
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Mot de passe"})
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        label=_("Password")
     )
 
 class RegisterForm(forms.ModelForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "ex: john doe"}),
+        label=_("Username")
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "ex: contact@domain.com"}),
+        label=_("Email")
+    )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Mot de passe"})
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": _("8 characters required with at least one letter and one number")}),
+        label=_("Password")
     )
     confirm_password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Confirmez le mot de passe"})
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": _("confirm the password")}),
+        label=_("Confirm password")
     )
-
     class Meta:
         model = User
         fields = ["username", "email", "password"]

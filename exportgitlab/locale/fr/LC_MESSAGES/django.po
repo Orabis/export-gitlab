@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-24 14:09+0100\n"
+"POT-Creation-Date: 2025-02-24 20:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,32 @@ msgstr ""
 #, python-format
 msgid "Invalid gitlab token %(error_name)s"
 msgstr "Token gitlab invalide %(error_name)s"
+
+#: .\exportgitlab\apps\export\forms.py:19
+#: .\exportgitlab\apps\export\forms.py:29
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: .\exportgitlab\apps\export\forms.py:23
+#: .\exportgitlab\apps\export\forms.py:37
+msgid "Password"
+msgstr "Mot de passe"
+
+#: .\exportgitlab\apps\export\forms.py:33
+msgid "Email"
+msgstr "Courriel"
+
+#: .\exportgitlab\apps\export\forms.py:36
+msgid "8 characters required with at least one letter and one number"
+msgstr "Au moins 8 caractères, avec des majuscules et un chiffre"
+
+#: .\exportgitlab\apps\export\forms.py:40
+msgid "confirm the password"
+msgstr "confirmer votre mot de passe"
+
+#: .\exportgitlab\apps\export\forms.py:41
+msgid "Confirm password"
+msgstr "Confirmer le mot de passe"
 
 #: .\exportgitlab\apps\export\models.py:21
 msgid "Gitlab personal token"
@@ -93,12 +119,20 @@ msgstr "Page non trouvé"
 msgid "Error"
 msgstr "Erreur"
 
+#: .\exportgitlab\templates\base.html:36
+msgid "Projects"
+msgstr "Projets"
+
 #: .\exportgitlab\templates\base.html:39
 #: .\exportgitlab\templates\export\user_profile.html:3
 msgid "Profile"
 msgstr "Profil"
 
-#: .\exportgitlab\templates\base.html:56
+#: .\exportgitlab\templates\base.html:42
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: .\exportgitlab\templates\base.html:59
 msgid "Homepage"
 msgstr "Page d'accueil"
 
@@ -107,7 +141,7 @@ msgid "Token Reset"
 msgstr "Reset Token"
 
 #: .\exportgitlab\templates\export\change_user_token.html:12
-#: .\exportgitlab\templates\export\user_profile.html:27
+#: .\exportgitlab\templates\export\user_profile.html:26
 msgid "GitLab Token :"
 msgstr "Token GitLab :"
 
@@ -202,27 +236,30 @@ msgstr "suivant"
 msgid "last"
 msgstr "dernier"
 
-#: .\exportgitlab\templates\export\user_profile.html:19
-#: .\exportgitlab\templates\export\user_profile.html:29
+#: .\exportgitlab\templates\export\user_login.html:3
+msgid "Connexion"
+msgstr "Connexion"
+
+#: .\exportgitlab\templates\export\user_profile.html:18
+#: .\exportgitlab\templates\export\user_profile.html:28
 #, fuzzy
 #| msgid "No token defined "
 msgid "No token defined"
 msgstr "Aucun token défini"
 
-#: .\exportgitlab\templates\export\user_profile.html:23
+#: .\exportgitlab\templates\export\user_profile.html:22
 msgid "User Information"
 msgstr "Information Utilisateur"
 
-#: .\exportgitlab\templates\export\user_profile.html:25
+#: .\exportgitlab\templates\export\user_profile.html:24
+#, fuzzy
+#| msgid "Username :"
 msgid "Username :"
 msgstr "Nom d'utilisateur :"
 
-#: .\exportgitlab\templates\export\user_profile.html:36
+#: .\exportgitlab\templates\export\user_profile.html:35
 msgid "Change the token "
 msgstr "Changer le token"
-
-#~ msgid "Logout"
-#~ msgstr "Déconnexion"
 
 #~ msgid ""
 #~ "ID error (Project is already in the database ? Error in entering the ID ?)"

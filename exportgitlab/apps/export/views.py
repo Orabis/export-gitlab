@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -205,3 +205,7 @@ def login_view(request):
                 login(request, user)
                 return redirect(next_url)
     return render(request, "export/user_login.html", {"login_form": login_form, "register_form": register_form})
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")

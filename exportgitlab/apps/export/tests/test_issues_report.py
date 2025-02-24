@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from exportgitlab.apps.export.models import Project, User
-
+#MODIFY THE FILE DATA FOR TESTING GITLAB USER API
 with open("exportgitlab/apps/export/tests/fixtures/user_request.json") as f:
     user_json = json.load(f)
 
@@ -25,7 +25,7 @@ with open("exportgitlab/apps/export/tests/fixtures/pdf_request_file.pdf", "rb") 
 def get_profile_response() -> responses.Response:
     response = responses.Response(
         method=responses.GET,
-        url="https://git.unistra.fr/api/v4/user",
+        url="https://gitlab.com/api/v4/user",
         json=user_json,
     )
     return response
@@ -33,14 +33,9 @@ def get_profile_response() -> responses.Response:
 
 def responses_add():
     responses.add(get_profile_response())
-    responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755", json=project_json)
-    responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/issues/1", json=issue_json)
-    responses.add(
-        responses.GET,
-        "https://git.unistra.fr/di/export-gitlab/uploads/0674c1eafb9d0fa4fc590f031bf68414/maquette_consult_ETAPE.png",
-        body=image_png,
-    )
-    responses.add(responses.POST, "http://django-docker-1.di.unistra.fr:8000/", body=request_pdf)
+    responses.add(responses.GET, "https://gitlab.com/api/v4/projects/34755", json=project_json)
+    responses.add(responses.GET, "https://gitlab.com/api/v4/projects/34755/issues/1", json=issue_json)
+    responses.add(responses.POST, "http://localhost:8001", body=request_pdf)
 
 
 class IssuesReportTest(TestCase):

@@ -177,8 +177,8 @@ TEMPLATES = [
 ############################
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -239,9 +239,9 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 def username_format(username):
     return username.lower()
 
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 AUTH_USER_MODEL = 'export.User'
-WKHTML_TO_PDF_URL = 'http://django-docker-1.di.unistra.fr:8000'
+WKHTML_TO_PDF_URL = 'http://localhost:8001'
 DEFAULT_FROM_EMAIL = "ne-pas-repondre@unistra.fr"
 USERS_EMAILS = ["cdf.leo.merkel@gmail.com"]
 LOGIN_URL = '/accounts/login/'

@@ -11,7 +11,7 @@ from exportgitlab.apps.export.views import (
     refresh_project,
 )
 
-
+#TODO FIX THE TESTS MIDDLEWARE NOT CORRECTLY SETUP
 class ProjectsTest(TestCase):
     def setUp(self):
         self.url = reverse("list_all_projects_homepage")

@@ -15,7 +15,7 @@ from .decorators import gitlab_valid_auth_required
 from .forms import *
 from .models import *
 
- 
+@login_required
 def user_profile(request):
     return render(request, "export/user_profile.html", {"user": request.user})
 

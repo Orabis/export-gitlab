@@ -71,5 +71,4 @@ INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
 
 WKHTML_TO_PDF_URL = "http://localhost:8001"
 
-GITLAB_SESSION_COOKIE = environ.get('GITLAB_SESSION_COOKIE', '')
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

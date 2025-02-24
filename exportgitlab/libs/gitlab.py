@@ -4,7 +4,7 @@ from exportgitlab.libs.color_contrast import passes
 
 
 def gl_connection(user_token):
-    gl = gitlab.Gitlab(url="https://git.unistra.fr", private_token=user_token)
+    gl = gitlab.Gitlab(url="https://gitlab.com/", private_token=user_token)
     gl.auth()
     return gl
 

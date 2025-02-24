@@ -7,7 +7,7 @@ from exportgitlab.apps.export.models import User
 class ProfileTest(TestCase):
     def test_view_anonymous_access_is_not_allowed(self):
         response = self.client.get(reverse("user_profile"))
-        self.assertRedirects(response, expected_url="/cas/login?next=%2Fprofile%2F", fetch_redirect_response=False)
+        self.assertRedirects(response, expected_url="/accounts/login/?next=/profile/", fetch_redirect_response=False)
 
     def test_view_authenticated_user_can_access(self):
         user = User.objects.create_user(username="John")
@@ -18,7 +18,7 @@ class ProfileTest(TestCase):
     def test_view_anonymous_access_is_not_allowed_on_token_change(self):
         response = self.client.get(reverse("user_change_token"))
         self.assertRedirects(
-            response, expected_url="/cas/login?next=/profile/token_pending/", fetch_redirect_response=False
+            response, expected_url="/accounts/login/?next=/profile/token_pending/", fetch_redirect_response=False
         )
 
     def test_view_authenticated_user_can_access_to_token_change(self):

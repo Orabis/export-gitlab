@@ -13,8 +13,8 @@ class GitlabConnectTest(TestCase):
             connection_return = gl_connection("test1234")
             self.assertIs(connection_return, mock_gl)
 
-        mock_gitlab.Gitlab.assert_called_with(url="https://git.unistra.fr", private_token="test1234")
-        mock_gitlab.auth.called_once()
+        mock_gitlab.Gitlab.assert_called_with(url="https://gitlab.com/", private_token="test1234")
+        mock_gl.auth.assert_called_once()
 
     def test_gitlab_get_labels(self):
         with patch("exportgitlab.libs.gitlab.gitlab.Gitlab") as gl_mock:

@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from exportgitlab.apps.export.models import Project, User
-
+#MODIFY THE FILE DATA FOR TESTING GITLAB USER API
 with open("exportgitlab/apps/export/tests/fixtures/user_request.json") as f:
     user_json = json.load(f)
 
@@ -23,7 +23,7 @@ with open("exportgitlab/apps/export/tests/fixtures/issues_request.json") as f:
 def get_profile_response() -> responses.Response:
     response = responses.Response(
         method=responses.GET,
-        url="https://git.unistra.fr/api/v4/user",
+        url="https://gitlab.com/api/v4/user",
         json=user_json,
     )
     return response
@@ -37,12 +37,12 @@ class IssuesViewTest(TestCase):
         responses.add(get_profile_response())
         responses.add(
             responses.GET,
-            "https://git.unistra.fr/api/v4/projects/34755",
+            "https://gitlab.com/api/v4/projects/34755",
             json=project_json,
         )
-        responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/labels", json=labels_json)
-        responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/issues?labels=", json=issues_json)
-        responses.add(responses.GET, "https://git.unistra.fr/api/v4/projects/34755/issues", json=issues_json)
+        responses.add(responses.GET, "https://gitlab.com/api/v4/projects/67410665/labels", json=labels_json)
+        responses.add(responses.GET, "https://gitlab.com/api/v4/projects/67410665/issues?labels=", json=issues_json)
+        responses.add(responses.GET, "https://gitlab.com/api/v4/projects/67410665/issues", json=issues_json)
 
     @responses.activate
     def test_api_issues(self):

@@ -135,7 +135,7 @@ STATICFILES_FINDERS = [
 
 ############
 # Dipstrap #
-############
+############²²
 
 DIPSTRAP_STATIC_URL = '//django-static.u-strasbg.fr/dipstrap/'
 
@@ -146,7 +146,6 @@ DIPSTRAP_STATIC_URL = '//django-static.u-strasbg.fr/dipstrap/'
 # Make this unique, and don't share it with anybody.
 # Only for dev and test environnement. Should be redefined for production
 # environnement
-SECRET_KEY = 'ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!'
 
 ##########################
 # Template configuration #
@@ -232,16 +231,12 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
-#####################
-# Log configuration #
-#####################
 
 def username_format(username):
     return username.lower()
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 AUTH_USER_MODEL = 'export.User'
-WKHTML_TO_PDF_URL = 'http://localhost:8001'
-DEFAULT_FROM_EMAIL = "ne-pas-repondre@unistra.fr"
+WKHTML_TO_PDF_URL = 'exportgitlab_wkhtmltopdf:9000'
 USERS_EMAILS = ["cdf.leo.merkel@gmail.com"]
 LOGIN_URL = '/accounts/login/'

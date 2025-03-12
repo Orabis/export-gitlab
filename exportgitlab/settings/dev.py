@@ -25,15 +25,16 @@ DEBUG = True
 
 DATABASES = {
     'default': {
-        'ENGINE': environ.get('DEFAULT_DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': environ.get('DEFAULT_DB_NAME', 'testdb'),
-        'USER': environ.get('DEFAULT_DB_USER', 'dev_dbuser'),
-        'PASSWORD': environ.get('DEFAULT_DB_PASSWORD', 'password'),
-        'HOST': environ.get('DEFAULT_DB_HOST', 'localhost'),
-        'PORT': environ.get('DEFAULT_DB_PORT', '5432'),
+        'ENGINE': environ.get('_DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': environ.get('DB_NAME', 'testdb'),
+        'USER': environ.get('DB_USER', 'dev_dbuser'),
+        'PASSWORD': environ.get('DB_PASSWORD', 'password'),
+        'HOST': environ.get('DB_HOST', 'localhost'),
+        'PORT': environ.get('DB_PORT', '5432'),
     }
 }
 
+SECRET_KEY = environ.get('SECRET_KEY', '')
 ############################
 # Allowed hosts & Security #
 ############################

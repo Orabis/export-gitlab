@@ -1,23 +1,54 @@
----
+version: '3'
 services:
+  exportgitapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: gunicorn --bind 0.0.0.0:8010 exportgitlab.wsgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8010:8010"
+    depends_on:
+      - db
+      - wkhtmltopdf
+    networks:
+      - exportgitnw
+    environment:
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
   wkhtmltopdf:
     image: "unistra/wkhtmltopdf:latest"
     container_name: "exportgitlab_wkhtmltopdf"
     restart: unless-stopped
     ports:
-      - "8001:80"
+      - "9000:80"
+    networks:
+      - exportgitnw
   db:
     image: "postgres:12"
     container_name: "exportgitlab_db"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=exportgitlab
-      - POSTGRES_PASSWORD=exportgitlab
-      - POSTGRES_DB=exportgitlab
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5433:5432"
+      - "5432:5432"
+    networks:
+      - exportgitnw
     volumes:
       - exportgitlab_db:/var/lib/postgresql/data
 volumes:
   exportgitlab_db:
-    driver: local
+
+networks:
+  exportgitnw:
+    external: true

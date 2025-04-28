@@ -179,6 +179,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -209,8 +210,9 @@ DJANGO_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin'
+    'django.contrib.admin',
     # 'django.contrib.admindocs',
 ]
 
@@ -237,6 +239,6 @@ def username_format(username):
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 AUTH_USER_MODEL = 'export.User'
-WKHTML_TO_PDF_URL = 'exportgitlab_wkhtmltopdf:9000'
+WKHTML_TO_PDF_URL = 'http://exportgitlab_wkhtmltopdf:9005'
 USERS_EMAILS = ["cdf.leo.merkel@gmail.com"]
 LOGIN_URL = '/accounts/login/'

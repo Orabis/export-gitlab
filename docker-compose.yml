@@ -24,31 +24,46 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+  static-server:
+    image: joseluisq/static-web-server
+    restart: unless-stopped
+    volumes:
+      - ./staticfiles:/staticfiles
+    environment:
+      - SERVER_PORT=8085
+      - SERVER_ROOT=/staticfiles
+      - SERVER_DIRECTORY_LISTING=true
+      - SERVER_CORS_ALLOW_ORIGINS=https://export.orabis.fr,https://cdn.orabis.fr
+      - SERVER_CORS_ALLOW_HEADERS=*
+      - SERVER_CORS_EXPOSE_HEADERS=*
+    ports:
+      - "8085:8085"
+    networks:
+      - exportgitnw
   wkhtmltopdf:
-    image: "unistra/wkhtmltopdf:latest"
+    image: "unistra-wkhtmltopdf-arm64:latest"
     container_name: "exportgitlab_wkhtmltopdf"
     restart: unless-stopped
     ports:
-      - "9000:80"
+      - "9005:9005"
     networks:
       - exportgitnw
   db:
     image: "postgres:12"
-    container_name: "exportgitlab_db"
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - exportgitnw
     volumes:
       - exportgitlab_db:/var/lib/postgresql/data
 volumes:
   exportgitlab_db:
-
+  staticfiles:
 networks:
   exportgitnw:
     external: true

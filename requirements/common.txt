@@ -10,3 +10,4 @@ urllib3
 charset-normalizer
 certifi
 tzdata
+django-cors-headers

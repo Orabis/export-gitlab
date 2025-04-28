@@ -46,18 +46,22 @@ def get_token_or_redirect(request):
         )
     return user_token
 
-
 def find_img_and_convert(soup, gitlab_project):
+    project_id = gitlab_project.id 
     for img_link in soup.find_all("img"):
-        r = requests.get(
-            f"{gitlab_project.web_url}{img_link['src']}",
-            headers={"Cookie": f"_gitlab_session={settings.GITLAB_SESSION_COOKIE}"},
-        )
-        image_encode = base64.b64encode(r.content).decode("utf-8")
-        type_mime = r.headers["Content-Type"]
-        img_link["src"] = f"data:{type_mime};base64,{image_encode}"
+        img_src = img_link["src"]
+        if img_src.startswith("/-/"):
+            full_url = f"{gitlab_project.web_url}{img_src}"
+        else:
+            full_url = f"https://gitlab.com/-/project/{project_id}{img_src}"
+        r = requests.get(full_url)
+        if r.status_code == 200:
+            image_encode = base64.b64encode(r.content).decode("utf-8")
+            type_mime = r.headers["Content-Type"]
+            img_link["src"] = f"data:{type_mime};base64,{image_encode}"
+        else:
+            print(f"Échec du téléchargement de {full_url}")
     return str(soup)
-
 
 def html_make_data(issue_id, gitlab_project):
     list_issues = gitlab_project.issues.get(issue_id)

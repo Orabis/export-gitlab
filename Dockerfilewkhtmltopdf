@@ -1,0 +1,53 @@
+# Base image for Raspberry Pi 4 (64-bit ARM)
+FROM arm64v8/debian:buster
+
+# Set environment variables and maintainer
+ENV DEBIAN_FRONTEND=noninteractive
+LABEL maintainer="chin@oberon.nl"
+
+# System setup (matches original unistra/wkhtmltopdf)
+RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get upgrade -y
+
+# Install core dependencies
+RUN apt-get install -y \
+    build-essential \
+    xorg \
+    libssl-dev \
+    libxrender-dev \
+    wget \
+    ca-certificates
+
+# Install runtime dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    xvfb \
+    libfontconfig \
+    libjpeg62-turbo \
+    xfonts-75dpi \
+    fontconfig
+
+# Download and install ARM64-compatible wkhtmltopdf
+RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_arm64.deb && \
+    dpkg -i wkhtmltox_0.12.6-1.buster_arm64.deb && \
+    apt-get install -f -y && \
+    rm wkhtmltox_0.12.6-1.buster_arm64.deb
+
+# Install Python and gunicorn extras (retain original unistra setup)
+RUN apt-get install -y python-pip && \
+    pip install werkzeug executor gunicorn && \
+    pip install futures gunicorn[eventlet] gunicorn[gevent] gunicorn[tornado] gunicorn[gthread]
+
+# Cleanup
+RUN apt-get -y clean && \
+    apt-get -y purge && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
+
+# Add application files (retain original ADD command)
+COPY app.py /app.py
+
+# Retain original runtime config
+EXPOSE 9005
+ENTRYPOINT ["usr/local/bin/gunicorn"]
+CMD ["-b", "0.0.0.0:9005", "--log-file", "-", "app:application"]
